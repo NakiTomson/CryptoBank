@@ -1,0 +1,20 @@
+[versions]
+kotlin_version = "1.7.20"
+serialization_version = "1.4.0"
+
+[libraries]
+gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin_version" }
+
+coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.6.4" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
+
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "kotlin_version" }
+serialization-gradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin_version" }
+
+[bundles]
+coroutines = ["coroutines-core", "coroutines-android"]
+serialization = ["serialization-json"]
+
+[plugins]
+android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_version" }

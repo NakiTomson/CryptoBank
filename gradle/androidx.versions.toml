@@ -1,0 +1,31 @@
+[versions]
+agp_version = "7.3.1"
+lifecycle_version = "2.5.1"
+room_version = "2.4.3"
+
+[libraries]
+annotation = "androidx.annotation:annotation:1.5.0"
+appcompat = "androidx.appcompat:appcompat:1.6.0-rc01"
+corektx = "androidx.core:core-ktx:1.9.0"
+splashscreen = "androidx.core:core-splashscreen:1.0.0-alpha02"
+datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
+
+lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle_version" }
+lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle_version" }
+lifecycle-runtimektx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle_version" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room_version" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room_version" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room_version" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room_version" }
+
+paging-runtime = "androidx.paging:paging-runtime:3.1.1"
+paging-compose = "androidx.paging:paging-compose:1.0.0-alpha17"
+
+[bundles]
+lifecycle = ["lifecycle-common", "lifecycle-process", "lifecycle-runtimektx"]
+room = ["room-runtime", "room-paging", "room-ktx"]
+
+[plugins]
+application = { id = "com.android.application", version.ref = "agp_version" }
+library = { id = "com.android.library", version.ref = "agp_version" }
