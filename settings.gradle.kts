@@ -24,4 +24,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "RyzBank"
-include(":app")
+include(":RyzBank")
+include(":RyzBank:app")

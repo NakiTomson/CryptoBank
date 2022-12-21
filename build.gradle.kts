@@ -5,6 +5,7 @@ plugins {
 }
 
 buildscript {
+    val compose_ui_version by extra("1.1.1")
     dependencies {
         classpath(BuildPlugins.androidGradlePlugin)
         classpath(BuildPlugins.kotlinGradlePlugin)

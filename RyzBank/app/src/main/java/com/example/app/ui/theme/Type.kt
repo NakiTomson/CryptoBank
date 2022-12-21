@@ -1,4 +1,4 @@
-package com.example.ryzbank.ui.theme
+package com.example.app.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
