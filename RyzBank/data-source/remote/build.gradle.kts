@@ -1,14 +1,21 @@
 import Libraries.addCore
+import Libraries.addHilt
+import Libraries.addNetworkDependencies
 
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = AndroidConfig.applicationId
+    namespace = "remote"
 }
 
 dependencies {
+    implementation(project(":RyzBank:core"))
     addCore()
+    addHilt()
+    addNetworkDependencies()
 }

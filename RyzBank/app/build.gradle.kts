@@ -1,15 +1,17 @@
 import Libraries.addCompose
 import Libraries.addCore
-
+import Libraries.addHilt
 
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
 
-    namespace = "com.example.ryzbank"
+    namespace = AndroidConfig.applicationId
 
     buildTypes {
         named("debug") {
@@ -26,14 +28,14 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Libraries.Versions.composeUi
     }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
+    implementation(project(":RyzBank:domain"))
+    implementation(project(":RyzBank:data"))
+    implementation(project(":RyzBank:presentation"))
+
     addCore()
     addCompose()
+    addHilt()
 }

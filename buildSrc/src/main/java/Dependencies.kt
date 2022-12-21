@@ -41,6 +41,15 @@ object Libraries {
         const val composeUi = "1.3.2"
         const val composeActivity = "1.6.1"
         const val composeMaterial = "1.3.1"
+        const val hilt = "2.44"
+        const val navigationYoyager = "1.0.0-rc02"
+        const val room = "2.4.3"
+        const val dataStore = "1.0.0"
+        const val lifecycle = "2.5.1"
+        const val retrofit = "2.9.0"
+        const val okhttp3 = "4.10.0"
+        const val logging_interceptor = "4.10.0"
+        const val chucker = "3.5.2"
     }
 
     //Kotlin
@@ -55,7 +64,42 @@ object Libraries {
     private const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeUi}"
     private const val composeMaterial = "androidx.compose.material:material:${Versions.composeMaterial}"
     private const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.composeUi}"
-    private const val composeTestManifest= "androidx.compose.ui:ui-test-manifest:${Versions.composeUi}"
+    private const val composeTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.composeUi}"
+
+    //Hilt
+    private const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
+    private const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.hilt}"
+
+    //Navigation
+    private const val voyagerNavigator = "cafe.adriel.voyager:voyager-navigator:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorBottomSheet =
+        "cafe.adriel.voyager:voyager-bottom-sheet-navigator:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorTabNavigator =
+        "cafe.adriel.voyager:voyager-tab-navigator:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorTransitions =
+        "cafe.adriel.voyager:voyager-transitions:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorViewModel = "cafe.adriel.voyager:voyager-androidx:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorHilt = "cafe.adriel.voyager:voyager-hilt:${Versions.navigationYoyager}"
+    private const val voyagerNavigatorLivedata = "cafe.adriel.voyager:voyager-livedata:${Versions.navigationYoyager}"
+
+    //Room
+    private const val room = "androidx.room:room-runtime:${Versions.room}"
+    private const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+    private const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
+    private const val datastorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
+
+    //lifecycle
+    private const val lifecycleCommon = "androidx.lifecycle:lifecycle-common:${Versions.lifecycle}"
+    private const val lifecycleProcess = "androidx.lifecycle:lifecycle-process:${Versions.lifecycle}"
+    private const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
+
+    //NetWork
+    const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofitConverterGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+    const val okhttp3 = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
+    const val logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.logging_interceptor}"
+    const val chucker = "com.github.chuckerteam.chucker:library:${Versions.chucker}"
+    const val chuckerNoOp = "com.github.chuckerteam.chucker:library-no-op:${Versions.chucker}"
 
     fun DependencyHandler.addCore() {
         implementation(kotlin)
@@ -72,6 +116,43 @@ object Libraries {
         debugImplementation(composeTooling)
         debugImplementation(composeTestManifest)
     }
+
+    fun DependencyHandler.addHilt() {
+        implementation(hilt)
+        kapt(hiltCompiler)
+    }
+
+    fun DependencyHandler.addNavigation() {
+        implementation(voyagerNavigator)
+        implementation(voyagerNavigatorBottomSheet)
+        implementation(voyagerNavigatorTabNavigator)
+        implementation(voyagerNavigatorTransitions)
+        implementation(voyagerNavigatorViewModel)
+        implementation(voyagerNavigatorHilt)
+        implementation(voyagerNavigatorLivedata)
+    }
+
+    fun DependencyHandler.addRoom() {
+        implementation(room)
+        implementation(datastorePreferences)
+        implementation(roomKtx)
+        kapt(roomCompiler)
+    }
+
+    fun DependencyHandler.addLifecycle() {
+        implementation(lifecycleCommon)
+        implementation(lifecycleProcess)
+        kapt(lifecycleRuntime)
+    }
+
+    fun DependencyHandler.addNetworkDependencies() {
+        implementation(retrofit)
+        implementation(retrofitConverterGson)
+        implementation(okhttp3)
+        implementation(logging_interceptor)
+        debugImplementation(chucker)
+        releaseImplementation(chuckerNoOp)
+    }
 }
 
 private fun DependencyHandler.api(depName: String) = add("api", depName)
@@ -79,5 +160,10 @@ private fun DependencyHandler.implementation(depName: Any) = add("implementation
 private fun DependencyHandler.kapt(depName: Any) = add("kapt", depName)
 private fun DependencyHandler.compileOnly(depName: Any) = add("compileOnly", depName)
 private fun DependencyHandler.debugApi(dependencyNotation: Any) = add("debugApi", dependencyNotation)
-private fun DependencyHandler.debugImplementation(dependencyNotation: Any) = add("debugImplementation", dependencyNotation)
-private fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) = add("androidTestImplementation", dependencyNotation)
+private fun DependencyHandler.debugImplementation(dependencyNotation: Any) =
+    add("debugImplementation", dependencyNotation)
+private fun DependencyHandler.releaseImplementation(dependencyNotation: Any) =
+    add("releaseImplementation", dependencyNotation)
+
+private fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) =
+    add("androidTestImplementation", dependencyNotation)

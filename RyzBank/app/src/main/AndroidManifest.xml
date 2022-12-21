@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RyzBank">
         <activity
-            android:name="com.example.app.MainActivity"
+            android:name="com.example.presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.RyzBank">
             <intent-filter>
@@ -19,9 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
     </application>
 

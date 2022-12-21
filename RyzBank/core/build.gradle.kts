@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = AndroidConfig.applicationId
+    namespace = "core"
 }
 
 dependencies {
