@@ -26,3 +26,4 @@ dependencyResolutionManagement {
 rootProject.name = "RyzBank"
 include(":RyzBank")
 include(":RyzBank:app")
+include(":RyzBank:core")
