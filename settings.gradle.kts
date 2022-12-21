@@ -24,9 +24,10 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "RyzBank"
-include(":RyzBank")
 include(":RyzBank:app")
 include(":RyzBank:core")
 include(":RyzBank:domain")
 include(":RyzBank:presentation")
 include(":RyzBank:data")
+include(":RyzBank:data-source:local")
+include(":RyzBank:data-source:remote")
