@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data-source:local"))
     implementation(project(":data-source:remote"))
-    implementation(project(":domain"))
 
     addCore()
     addHilt()

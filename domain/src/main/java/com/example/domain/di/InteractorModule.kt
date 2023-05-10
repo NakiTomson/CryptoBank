@@ -1,5 +1,8 @@
 package com.example.domain.di
 
+import com.example.domain.api.UserInteractor
+import com.example.domain.impl.UserInteractorImpl
+import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -8,5 +11,6 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class InteractorModule {
 
-    // Bind Interactor's
+    @Binds
+    abstract fun bindUserInteractor(userInteractor: UserInteractorImpl): UserInteractor
 }
