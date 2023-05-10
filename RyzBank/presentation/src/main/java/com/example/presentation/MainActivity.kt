@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.Navigator
-import com.example.app.ui.theme.RyzBankTheme
-import com.example.presentation.ui.home.HomeScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.presentation.theme.RyzBankTheme
+import com.example.presentation.navigation.nav_host.SetupRootNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -20,9 +23,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
                 ) {
-                    Navigator(screen = HomeScreen)
+                    SetupRootNavHost(navController = rememberNavController())
                 }
             }
         }
     }
 }
+

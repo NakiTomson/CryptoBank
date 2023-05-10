@@ -38,9 +38,6 @@ object Libraries {
     object Versions {
         const val coreKtx = "1.9.0"
         const val coroutines = "1.6.2"
-        const val composeUi = "1.3.2"
-        const val composeActivity = "1.6.1"
-        const val composeMaterial = "1.3.1"
         const val hilt = "2.44"
         const val navigationYoyager = "1.0.0-rc02"
         const val room = "2.4.3"
@@ -50,6 +47,20 @@ object Libraries {
         const val okhttp3 = "4.10.0"
         const val logging_interceptor = "4.10.0"
         const val chucker = "3.5.2"
+
+        //compose
+        const val composeUi = "1.3.2"
+        const val composeViewModel = "2.5.1"
+        const val composeNavigation = "2.6.0-alpha04"
+        const val composeLiveData = "1.4.0-alpha03"
+        const val composeHilt = "1.1.0-alpha01"
+        const val composeLifecycle = "2.6.0-alpha04"
+        const val coilCompose = "2.2.2"
+        const val composeConstraint = "1.0.1"
+        const val accompanist = "0.27.0"
+        const val composeActivity = "1.6.1"
+        const val composeMaterial = "1.3.1"
+        const val composeMaterial3 = "1.1.0-alpha03"
     }
 
     //Kotlin
@@ -63,8 +74,17 @@ object Libraries {
     private const val composeActivity = "androidx.activity:activity-compose:${Versions.composeActivity}"
     private const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeUi}"
     private const val composeMaterial = "androidx.compose.material:material:${Versions.composeMaterial}"
+    private const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial3}"
     private const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.composeUi}"
     private const val composeTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.composeUi}"
+    private const val composeViewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.composeViewModel}"
+    private const val composeMaterialIcons = "androidx.compose.material:material-icons-extended:${Versions.composeMaterial}"
+    private const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
+    private const val composeLivedata = "androidx.compose.runtime:runtime-livedata:${Versions.composeLiveData}"
+    private const val composeHilt = "androidx.hilt:hilt-navigation-compose:${Versions.composeHilt}"
+    private const val composeLifecycle = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeLifecycle}"
+    private const val accompanistUicontroller = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
+    private const val coilCompose = "io.coil-kt:coil-compose:${Versions.coilCompose}"
 
     //Hilt
     private const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
@@ -113,6 +133,15 @@ object Libraries {
         implementation(composeActivity)
         implementation(composeToolingPreview)
         implementation(composeMaterial)
+        implementation(composeMaterial3)
+        implementation(composeViewmodel)
+        implementation(composeMaterialIcons)
+        implementation(composeNavigation)
+        implementation(composeLivedata)
+        implementation(composeHilt)
+        implementation(composeLifecycle)
+        implementation(accompanistUicontroller)
+        implementation(coilCompose)
         debugImplementation(composeTooling)
         debugImplementation(composeTestManifest)
     }

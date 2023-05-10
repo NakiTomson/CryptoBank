@@ -1,3 +1,4 @@
+import Libraries.addCompose
 import Libraries.addCore
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
 
 android {
     namespace = "core"
+
 }
 
 dependencies {

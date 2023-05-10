@@ -7,6 +7,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
 }
 
@@ -23,8 +24,8 @@ android {
 dependencies {
     implementation(project(":RyzBank:domain"))
     implementation(project(":RyzBank:core"))
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha04")
     addCore()
     addCompose()
-    addNavigation()
     addHilt()
 }

@@ -1,4 +1,4 @@
-package com.courier.network.errors
+package com.example.remote.errors
 
 open class ServerError : Throwable() {
     class UndefinedError : ServerError()

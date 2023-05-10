@@ -2,7 +2,7 @@ package com.example.remote.adapter
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.courier.network.errors.ServerError
+import com.example.remote.errors.ServerError
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
