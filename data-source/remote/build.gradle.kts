@@ -1,5 +1,6 @@
 import Libraries.addCore
 import Libraries.addHilt
+import Libraries.addNetworkDependencies
 
 plugins {
     id("com.android.library")
@@ -9,11 +10,12 @@ plugins {
 }
 
 android {
-    namespace = "domain"
+    namespace = "remote"
 }
 
 dependencies {
-    implementation(project(":RyzBank:core"))
+    implementation(project(":core"))
     addCore()
     addHilt()
+    addNetworkDependencies()
 }

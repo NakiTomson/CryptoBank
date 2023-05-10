@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":RyzBank:core"))
+    implementation(project(":core"))
     addCore()
     addRoom()
     addHilt()

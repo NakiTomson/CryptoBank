@@ -31,9 +31,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":RyzBank:domain"))
-    implementation(project(":RyzBank:data"))
-    implementation(project(":RyzBank:presentation"))
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":presentation"))
 
     addCore()
     addCompose()

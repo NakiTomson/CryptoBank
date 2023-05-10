@@ -9,15 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "data"
+    namespace = "domain"
 }
 
 dependencies {
-    implementation(project(":RyzBank:core"))
-    implementation(project(":RyzBank:data-source:local"))
-    implementation(project(":RyzBank:data-source:remote"))
-    implementation(project(":RyzBank:domain"))
-
+    implementation(project(":core"))
     addCore()
     addHilt()
 }

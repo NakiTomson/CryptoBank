@@ -11,16 +11,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/RyzBank" />
-            <option value="$PROJECT_DIR$/RyzBank/app" />
-            <option value="$PROJECT_DIR$/RyzBank/core" />
-            <option value="$PROJECT_DIR$/RyzBank/data" />
-            <option value="$PROJECT_DIR$/RyzBank/data-source" />
-            <option value="$PROJECT_DIR$/RyzBank/data-source/local" />
-            <option value="$PROJECT_DIR$/RyzBank/data-source/remote" />
-            <option value="$PROJECT_DIR$/RyzBank/domain" />
-            <option value="$PROJECT_DIR$/RyzBank/presentation" />
+            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data-source" />
+            <option value="$PROJECT_DIR$/data-source/local" />
+            <option value="$PROJECT_DIR$/data-source/remote" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/presentation" />
           </set>
         </option>
       </GradleProjectSettings>

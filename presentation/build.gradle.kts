@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":RyzBank:domain"))
-    implementation(project(":RyzBank:core"))
+    implementation(project(":domain"))
+    implementation(project(":core"))
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha04")
     addCore()
     addCompose()
