@@ -10,12 +10,11 @@ import javax.inject.Inject
 class ServiceFactoryImpl @Inject constructor(
     private val okHttpClientBuilder: OkHttpClient.Builder,
     private val gson: Gson,
-//    private val configuration: Configuration
 ) : ServiceFactory {
 
     override fun <S> createService(serviceClass: Class<S>): S {
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(ResultCallAdapter.Factory(ResponseBodyToErrorResponseConverter()))
             .client(okHttpClientBuilder.build())
@@ -23,5 +22,7 @@ class ServiceFactoryImpl @Inject constructor(
             .create(serviceClass)
     }
 
+    companion object {
+        const val BASE_URL = "https://645bcdcfa8f9e4d6e77393a3.mockapi.io"
+    }
 }
-

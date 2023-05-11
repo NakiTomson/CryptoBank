@@ -24,7 +24,6 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha04")
     addCore()
     addCompose()
     addHilt()

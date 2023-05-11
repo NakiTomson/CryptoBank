@@ -22,6 +22,15 @@ android {
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
     }
+    flavorDimensions += "default"
+
+    productFlavors {
+        create("dev") {
+            dimension = "default"
+            applicationId = "${AndroidConfig.applicationId}.dev"
+            buildConfigField("String", "BASE_URL", "\"https://645bcdcfa8f9e4d6e77393a3.mockapi.io\"")
+        }
+    }
     buildFeatures {
         compose = true
     }

@@ -1,5 +1,6 @@
 import Libraries.addCore
 import Libraries.addHilt
+import Libraries.addRoom
 
 plugins {
     id("com.android.library")
@@ -16,7 +17,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data-source:local"))
     implementation(project(":data-source:remote"))
-
+    addRoom()
     addCore()
     addHilt()
 }

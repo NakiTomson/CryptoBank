@@ -106,7 +106,7 @@ object Libraries {
     private const val room = "androidx.room:room-runtime:${Versions.room}"
     private const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
     private const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
-    private const val datastorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
+    const val datastorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
 
     //lifecycle
     private const val lifecycleCommon = "androidx.lifecycle:lifecycle-common:${Versions.lifecycle}"

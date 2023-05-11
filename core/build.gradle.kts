@@ -13,4 +13,5 @@ android {
 
 dependencies {
     addCore()
+    implementation(Libraries.datastorePreferences)
 }

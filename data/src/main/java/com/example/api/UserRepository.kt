@@ -1,13 +1,10 @@
-package com.example.domain.api
+package com.example.api
 
 import kotlinx.coroutines.flow.Flow
 
-interface UserInteractor {
-
-    var isNeedShowOnBoarding: Boolean
+interface UserRepository {
 
     val token: Flow<String?>
 
     suspend fun prepareToken()
-
 }

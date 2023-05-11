@@ -1,19 +1,16 @@
 package com.example.presentation.core
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
@@ -28,6 +25,11 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
     protected open val catchThrowable: (Throwable) -> Unit = {
 
     }
+
+    protected fun BaseViewModel.viewModelScope(
+        context: CoroutineContext = EmptyCoroutineContext,
+        block: suspend CoroutineScope.() -> Unit
+    ): Job = viewModelScope.launch(this@BaseViewModel.coroutineContext + context) { block.invoke(this) }
 
     protected fun handleError(throwable: Throwable) {
         throwable.printStackTrace()

@@ -1,5 +1,9 @@
 package com.example.presentation.core
 
-object EmptySideEffect
+interface SideEffect
 
-object EmptyState
+interface BaseState
+
+object EmptyState : BaseState
+
+object EmptySideEffect : SideEffect

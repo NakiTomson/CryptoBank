@@ -11,6 +11,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -46,7 +47,7 @@ interface NetworkModule {
 
         @Provides
         @Singleton
-        fun httpCache(context: Context): Cache = Cache(context.cacheDir, httpCacheSizeBytes)
+        fun httpCache(@ApplicationContext context: Context): Cache = Cache(context.cacheDir, httpCacheSizeBytes)
 
         @Provides
         @Singleton
@@ -57,7 +58,7 @@ interface NetworkModule {
         @Singleton
         @Provides
         fun provideOkHttpClient(
-            context: Context,
+            @ApplicationContext context: Context,
             cache: Cache,
             authInterceptor: Interceptor,
             loggingInterceptor: HttpLoggingInterceptor
