@@ -36,7 +36,7 @@ fun SplashRoute(
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
-    InternetConnectionLostScreen(state.value == SplashState.Error, {
+    InternetConnectionLostScreen({ state.value == SplashState.Error }, {
         viewModel.tryLoadAgain()
     }, content = {
         SplashRoute(openOnBoarding, openRegistration, openNavigation)

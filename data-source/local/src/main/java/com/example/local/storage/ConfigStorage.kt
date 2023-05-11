@@ -15,7 +15,7 @@ class ConfigStorage @Inject constructor(@ApplicationContext private val context:
     private val isRegistrationKey = booleanPreferencesKey("needShowRegistration")
 
     suspend fun isNeedOnBoarding(): Boolean = context.appDataStore
-        .get(isOnBoardingKey) ?: false
+        .get(isOnBoardingKey) ?: true
 
     suspend fun updateNeedOnBoarding(value: Boolean) = context.appDataStore
         .edit { it[isOnBoardingKey] = value }
