@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserInteractor {
 
-    var isNeedShowOnBoarding: Boolean
-
     val token: Flow<String?>
 
-    suspend fun prepareToken()
+    suspend fun isNeedOnBoarding(): Boolean
 
+    suspend fun isNeedRegistration(): Boolean
+
+    suspend fun prepareToken()
 }

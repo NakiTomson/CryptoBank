@@ -12,14 +12,13 @@ class UserInteractorImpl @Inject constructor(
     private val dispatchers: Dispatchers,
 ) : UserInteractor {
 
-    override var isNeedShowOnBoarding: Boolean
-        get() = true
-        set(value) {}
-
     override val token: Flow<String?> = userRepository.token
+
+    override suspend fun isNeedOnBoarding(): Boolean = userRepository.isNeedOnBoarding()
+
+    override suspend fun isNeedRegistration(): Boolean = userRepository.isNeedRegistration()
 
     override suspend fun prepareToken(): Unit = withContext(dispatchers.io) {
         userRepository.prepareToken()
     }
-
 }

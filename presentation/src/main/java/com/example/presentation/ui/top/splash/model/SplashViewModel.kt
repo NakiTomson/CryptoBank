@@ -1,28 +1,35 @@
 package com.example.presentation.ui.top.splash.model
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.SavedStateHandle
 import com.example.domain.api.UserInteractor
+import com.example.errors.ServerError
 import com.example.presentation.core.BaseState
 import com.example.presentation.core.EmptyState
 import com.example.presentation.core.SideEffect
 import com.example.presentation.core.StatefulScreenModel
+import com.example.presentation.ui.top.splash.state.SplashSideEffect
 import com.example.presentation.ui.top.splash.state.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val userInteractor: UserInteractor,
+    private val dispatcher: com.example.core.Dispatchers,
 ) : StatefulScreenModel<BaseState, SideEffect>(EmptyState) {
 
-    init {
+    fun initSplashDelay() {
         viewModelScope {
             subscribeToken()
+        }
+    }
+
+    fun tryLoadAgain() {
+        viewModelScope {
+            prepareToken()
         }
     }
 
@@ -32,7 +39,7 @@ class SplashViewModel @Inject constructor(
                 prepareToken()
                 return@collect
             }
-            reduceState { SplashState.Complete }
+            onSplashTimerFinished()
         }
     }
 
@@ -40,9 +47,27 @@ class SplashViewModel @Inject constructor(
         try {
             reduceState { SplashState.Loading }
             userInteractor.prepareToken()
-        } catch (e: Exception) {
+        } catch (e: ServerError) {
             reduceState { SplashState.Error }
         }
     }
 
+    private suspend fun onSplashTimerFinished() {
+        withContext(dispatcher.io) {
+            delay(TIMER_DELAY)
+            withContext(dispatcher.main) {
+                reduceState { SplashState.Complete }
+                when {
+                    userInteractor.isNeedOnBoarding() -> postSideEffect(SplashSideEffect.OpenOnBoarding)
+                    userInteractor.isNeedRegistration() -> postSideEffect(SplashSideEffect.OpenRegistration)
+                    else -> postSideEffect(SplashSideEffect.OpenNavigation)
+                }
+            }
+        }
+    }
+
+
+    companion object {
+        const val TIMER_DELAY = 1000L
+    }
 }

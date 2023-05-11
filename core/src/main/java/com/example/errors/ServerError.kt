@@ -1,4 +1,4 @@
-package com.example.remote.errors
+package com.example.errors
 
 open class ServerError : Throwable() {
     class UndefinedError : ServerError()

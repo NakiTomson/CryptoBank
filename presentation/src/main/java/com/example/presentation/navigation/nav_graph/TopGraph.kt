@@ -21,11 +21,13 @@ fun NavGraphBuilder.topNavGraph(
 ) {
     navigation(startDestination = TopScreens.Splash.route, route = TopScreens.getGraph()) {
         composable(route = TopScreens.Splash.route) {
-            SplashRoute(onSplashFinished = {
+            SplashRoute(openOnBoarding = {
                 navController.navigateInclusive(TopScreens.OnBoarding.route, TopScreens.Splash.route)
-            }, singInClicked = {
+            }, openRegistration = {
                 navController.navigate(AuthenticationScreens.getGraph())
-            })
+            }, openNavigation = {
+                navController.navigateInclusive(TopScreens.Navigation.route, TopScreens.OnBoarding.route)
+            }, supportNetworkErrorScreen = Unit)
         }
         composable(route = TopScreens.OnBoarding.route) {
             OnBoardingScreen(onBoardingFinished = {
@@ -37,7 +39,4 @@ fun NavGraphBuilder.topNavGraph(
         }
     }
 }
-
-@Parcelize
-data class Person(val name: String) : Parcelable
 
