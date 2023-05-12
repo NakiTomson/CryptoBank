@@ -10,4 +10,6 @@
     <string name="on_boarding_next_want">Want to try!</string>
     <string name="skip">Skip</string>
     <string name="continue_now">Continue Now</string>
+    <string name="not_have_account">Don’t have account?</string>
+    <string name="create_now">Create now?</string>
 </resources>

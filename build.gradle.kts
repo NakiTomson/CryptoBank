@@ -1,5 +1,5 @@
 plugins {
-    kotlin("android") version "1.7.20" apply false
+    kotlin("android") version "1.8.10" apply false
     id("com.android.application") version "7.3.1" apply false
     id("com.android.library") version "7.3.1" apply false
 }
@@ -29,8 +29,8 @@ fun com.android.build.gradle.BaseExtension.baseConfig() {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
         }
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions {

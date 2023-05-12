@@ -211,8 +211,8 @@ fun OnBoardingPage(item: OnBoardingEntity) {
             model = ImageRequest.Builder(LocalContext.current)
                 .data(item.media)
                 .crossfade(true)
-                .diskCachePolicy(CachePolicy.DISABLED)
-                .memoryCachePolicy(CachePolicy.DISABLED).build(),
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .memoryCachePolicy(CachePolicy.ENABLED).build(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier

@@ -7,7 +7,7 @@ import androidx.navigation.compose.navigation
 import com.example.presentation.navigation.sreens.AuthenticationScreens
 import com.example.presentation.navigation.sreens.TopScreens
 import com.example.presentation.ui.authentication.forget.screen.ForgetScreen
-import com.example.presentation.ui.authentication.log_in.screen.SignInScreen
+import com.example.presentation.ui.authentication.log_in.screen.LogInRoute
 import com.example.presentation.ui.authentication.sign_up.screen.SignUpScreen
 
 
@@ -16,9 +16,9 @@ fun NavGraphBuilder.authenticationNavGraph(
 ) {
     navigation(startDestination = AuthenticationScreens.SingIn.route, route = AuthenticationScreens.getGraph()) {
         composable(route = AuthenticationScreens.SingIn.route) {
-            SignInScreen() {
+            LogInRoute(authorizationSuccess = {
                 navController.navigate(AuthenticationScreens.SingUp.route)
-            }
+            })
         }
         composable(route = AuthenticationScreens.SingUp.route) {
             SignUpScreen() {
