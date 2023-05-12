@@ -1,5 +1,7 @@
 package com.example.presentation.ui.top.onboarding.model
 
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import com.example.domain.api.OnBoardingInteractor
 import com.example.domain.api.UserInteractor
@@ -100,7 +102,7 @@ class OnBoardingViewModel @Inject constructor(
         postSideEffect(OnBoardingSideEffect.OpenRegister)
     }
 
-    enum class ActionTypes(val nameRes: Int) {
+    enum class ActionTypes(@StringRes val nameRes: Int) {
         SKIP(R.string.skip),
         OK(R.string.continue_now)
     }

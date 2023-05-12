@@ -62,10 +62,7 @@ import presentation.R
 private fun SplashScreenPreview() {
     val text = stringResource(R.string.on_boarding_next_action)
     val mock = OnBoardingEntity(text, text, "https://i.ibb.co/VNycWc0/screen-One.jpg")
-    OnBoardingScreen(
-        onBoardings = { listOf(mock, mock) },
-        actionTypes = { OnBoardingViewModel.ActionTypes.SKIP },
-    )
+    OnBoardingScreen(onBoardings = { listOf(mock, mock) })
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -83,7 +80,7 @@ fun OnBoardingRoute(
         viewModel.onTryAgainClicked()
     }, content = {
         OnBoardingRoute(openRegisterRoute, openNavigationRoute, popBackStack, viewModel)
-    }, Black100, Black100)
+    }, Black100, Black100, Black100)
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalPermissionsApi::class)
@@ -148,7 +145,7 @@ fun OnBoardingRoute(
 @Composable
 fun OnBoardingScreen(
     onBoardings: () -> List<OnBoardingEntity>,
-    actionTypes: () -> OnBoardingViewModel.ActionTypes,
+    actionTypes: () -> OnBoardingViewModel.ActionTypes = { OnBoardingViewModel.ActionTypes.OK },
     pagerState: PagerState = rememberPagerState(),
     onNextClicked: () -> Unit = {},
 ) {

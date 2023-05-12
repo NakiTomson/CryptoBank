@@ -36,6 +36,7 @@ fun InternetConnectionLostScreen(
     content: @Composable () -> Unit = {},
     defStatusBarColor: Color = Color.White,
     errorStatusBarColor: Color = Color.Black,
+    background: Color = Color.Black,
 ) {
     content()
     val systemUiController = rememberSystemUiController()
@@ -44,7 +45,7 @@ fun InternetConnectionLostScreen(
         systemUiController.setNavigationBarColor(defStatusBarColor)
     }
     if (isShowError.invoke()) {
-        Box(Modifier.background(Color.Black), contentAlignment = Alignment.Center) {
+        Box(Modifier.background(background), contentAlignment = Alignment.Center) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -71,7 +72,7 @@ fun InternetConnectionLostScreen(
                 Text(
                     text = stringResource(R.string.no_internet_connection),
                     modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colors.background,
+                    color = Color.White,
                     fontSize = MaterialTheme.typography.subtitle1.copy(fontSize = 18.sp).fontSize
                 )
 
