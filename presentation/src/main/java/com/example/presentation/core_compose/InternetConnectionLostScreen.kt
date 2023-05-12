@@ -34,12 +34,13 @@ fun InternetConnectionLostScreen(
     isShowError: () -> Boolean = { false },
     tryAgainClicked: () -> Unit = {},
     content: @Composable () -> Unit = {},
-    defStatusBarColor: Color = Color.White
+    defStatusBarColor: Color = Color.White,
+    errorStatusBarColor: Color = Color.Black,
 ) {
     content()
     val systemUiController = rememberSystemUiController()
     SideEffect {
-        systemUiController.setStatusBarColor(color = if (isShowError.invoke()) Color.Black else defStatusBarColor)
+        systemUiController.setStatusBarColor(color = if (isShowError.invoke()) errorStatusBarColor else defStatusBarColor)
         systemUiController.setNavigationBarColor(defStatusBarColor)
     }
     if (isShowError.invoke()) {

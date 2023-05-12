@@ -4,20 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.bsl.local.example.entity.MockEntity
+import com.example.local.dao.OnBoardingDao
+import com.example.local.entity.OnBoardingDb
 
-@Database(entities = [MockEntity::class], version = 1, exportSchema = true)
+@Database(entities = [OnBoardingDb::class], version = 1, exportSchema = true)
 internal abstract class ApplicationDatabase : RoomDatabase() {
 
-    // TODO Declaring Dao's
-
-    companion object {
-
-        fun create(applicationContext: Context) =
-            Room.databaseBuilder(
-                applicationContext,
-                ApplicationDatabase::class.java,
-                "application",
-            )
-    }
+    abstract fun getOnboardDao(): OnBoardingDao
 }

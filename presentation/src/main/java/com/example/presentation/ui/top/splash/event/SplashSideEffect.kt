@@ -1,4 +1,4 @@
-package com.example.presentation.ui.top.splash.state
+package com.example.presentation.ui.top.splash.event
 
 import com.example.presentation.core.SideEffect
 

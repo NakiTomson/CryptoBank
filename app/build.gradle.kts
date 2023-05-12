@@ -15,7 +15,7 @@ android {
 
     buildTypes {
         named("debug") {
-            applicationIdSuffix = ".debug"
+//            applicationIdSuffix = ".debug"
         }
         named("release") {
             isMinifyEnabled = true
@@ -27,7 +27,7 @@ android {
     productFlavors {
         create("dev") {
             dimension = "default"
-            applicationId = "${AndroidConfig.applicationId}.dev"
+            applicationId = "${AndroidConfig.applicationId}"
             buildConfigField("String", "BASE_URL", "\"https://645bcdcfa8f9e4d6e77393a3.mockapi.io\"")
         }
     }

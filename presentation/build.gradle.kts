@@ -27,4 +27,7 @@ dependencies {
     addCore()
     addCompose()
     addHilt()
+    implementation(Libraries.accompanistPager)
+    implementation(Libraries.accompanistIndicators)
+    implementation(Libraries.accompanistPermissions)
 }

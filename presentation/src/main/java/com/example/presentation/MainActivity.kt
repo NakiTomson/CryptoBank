@@ -19,10 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RyzBankTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background,
-                ) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     SetupRootNavHost(navController = rememberNavController())
                 }
             }

@@ -1,6 +1,8 @@
 package com.example.di
 
+import com.example.api.OnBoardingRepository
 import com.example.api.UserRepository
+import com.example.impl.OnBoardingRepositoryImpl
 import com.example.impl.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -12,5 +14,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindUserInteractor(userInteractor: UserRepositoryImpl): UserRepository
+    abstract fun bindUserRepository(userInteractor: UserRepositoryImpl): UserRepository
+    @Binds
+    abstract fun bindOnBoardingRepository(userInteractor: OnBoardingRepositoryImpl): OnBoardingRepository
 }

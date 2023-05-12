@@ -85,6 +85,9 @@ object Libraries {
     private const val composeLifecycle = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeLifecycle}"
     private const val accompanistUicontroller = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
     private const val coilCompose = "io.coil-kt:coil-compose:${Versions.coilCompose}"
+    const val accompanistPager = "com.google.accompanist:accompanist-pager:${Versions.accompanist}"
+    const val accompanistIndicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"
+    const val accompanistPermissions = "com.google.accompanist:accompanist-permissions:${Versions.accompanist}"
 
     //Hilt
     private const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"

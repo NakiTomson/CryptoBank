@@ -17,7 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.presentation.core.EmptySideEffect
 import com.example.presentation.core_compose.InternetConnectionLostScreen
 import com.example.presentation.ui.top.splash.model.SplashViewModel
-import com.example.presentation.ui.top.splash.state.SplashSideEffect
+import com.example.presentation.ui.top.splash.event.SplashSideEffect
 import com.example.presentation.ui.top.splash.state.SplashState
 import presentation.R
 
@@ -29,9 +29,9 @@ private fun SplashScreenPreview() {
 
 @Composable
 fun SplashRoute(
-    openOnBoarding: () -> Unit = {},
-    openRegistration: () -> Unit = {},
-    openNavigation: () -> Unit = {},
+    openOnBoardingRoute: () -> Unit = {},
+    openRegistrationRoute: () -> Unit = {},
+    openNavigationRout: () -> Unit = {},
     supportNetworkErrorScreen: Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
@@ -39,7 +39,7 @@ fun SplashRoute(
     InternetConnectionLostScreen({ state.value == SplashState.Error }, {
         viewModel.tryLoadAgain()
     }, content = {
-        SplashRoute(openOnBoarding, openRegistration, openNavigation)
+        SplashRoute(openOnBoardingRoute, openRegistrationRoute, openNavigationRout)
     })
 }
 

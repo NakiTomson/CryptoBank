@@ -7,7 +7,7 @@ import com.example.presentation.core.BaseState
 import com.example.presentation.core.EmptyState
 import com.example.presentation.core.SideEffect
 import com.example.presentation.core.StatefulScreenModel
-import com.example.presentation.ui.top.splash.state.SplashSideEffect
+import com.example.presentation.ui.top.splash.event.SplashSideEffect
 import com.example.presentation.ui.top.splash.state.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

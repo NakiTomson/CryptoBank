@@ -4,8 +4,10 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="try_again">Try Again</string>
-    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="no_internet_connection">No internet connection</string>
 
-    <string name="on_boarding_next_action">Давно этого ждал!</string>
-    <string name="on_boarding_next_want">Хочу попробовать!</string>
+    <string name="on_boarding_next_action">Been waiting for this!</string>
+    <string name="on_boarding_next_want">Want to try!</string>
+    <string name="skip">Skip</string>
+    <string name="continue_now">Continue Now</string>
 </resources>
