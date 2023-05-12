@@ -8,7 +8,12 @@ interface UserRepository {
 
     suspend fun isNeedOnBoarding(): Boolean
 
+    suspend fun setNeedOnBoarding(isShow: Boolean)
+
     suspend fun isNeedRegistration(): Boolean
 
+    suspend fun setNeedRegistration(isShow: Boolean)
+
     suspend fun prepareToken()
+
 }

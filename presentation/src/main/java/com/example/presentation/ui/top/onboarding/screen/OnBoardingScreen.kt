@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -40,6 +37,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.entity.OnBoardingEntity
 import com.example.presentation.core.EmptySideEffect
+import com.example.presentation.core_compose.BackPressHandler
 import com.example.presentation.core_compose.InternetConnectionLostScreen
 import com.example.presentation.theme.Black100
 import com.example.presentation.theme.Black200
@@ -54,7 +52,6 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import presentation.R
@@ -76,6 +73,7 @@ private fun SplashScreenPreview() {
 fun OnBoardingRoute(
     openRegisterRoute: () -> Unit = {},
     openNavigationRoute: () -> Unit = {},
+    popBackStack: () -> Unit = {},
     supportNetworkErrorScreen: Unit,
     viewModel: OnBoardingViewModel = hiltViewModel()
 ) {
@@ -84,7 +82,7 @@ fun OnBoardingRoute(
     InternetConnectionLostScreen({ error.value }, {
         viewModel.onTryAgainClicked()
     }, content = {
-        OnBoardingRoute(openRegisterRoute, openNavigationRoute, viewModel)
+        OnBoardingRoute(openRegisterRoute, openNavigationRoute, popBackStack, viewModel)
     }, Black100, Black100)
 }
 
@@ -93,6 +91,7 @@ fun OnBoardingRoute(
 fun OnBoardingRoute(
     openRegisterRoute: () -> Unit = {},
     openNavigationRoute: () -> Unit = {},
+    popBackStack: () -> Unit = {},
     viewModel: OnBoardingViewModel = hiltViewModel()
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -101,11 +100,6 @@ fun OnBoardingRoute(
     val buttonType = state.value.buttonType.collectAsStateWithLifecycle()
     val selectedPage = state.value.selectedPage.collectAsStateWithLifecycle()
 
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(color = Black100)
-        systemUiController.setNavigationBarColor(Black100)
-    }
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
 
@@ -113,9 +107,13 @@ fun OnBoardingRoute(
         Manifest.permission.ACCESS_FINE_LOCATION,
     )
 
+    BackPressHandler(onBackPressed = {
+        coroutineScope.launch { viewModel.onBackClicked() }
+    })
+
     LaunchedEffect(key1 = viewModel, block = {
         snapshotFlow { selectedPage.value }
-            .filter { selectedPage.value != 0 }
+            .filter { selectedPage.value != -1 }
             .collect {
                 pagerState.animateScrollToPage(it)
             }
@@ -132,6 +130,7 @@ fun OnBoardingRoute(
 
                     OnBoardingSideEffect.OpenRegister -> openRegisterRoute.invoke()
                     OnBoardingSideEffect.OpenNavigation -> openNavigationRoute.invoke()
+                    OnBoardingSideEffect.Back -> popBackStack.invoke()
                 }
             }
     }

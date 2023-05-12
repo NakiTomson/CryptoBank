@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 data class OnBoardingState(
-    private val selectedPageValue: Int = 0,
+    private val selectedPageValue: Int = -1,
     private val buttonTypeValue: ActionTypes = ActionTypes.SKIP,
     private val onBoardingScreensValue: List<OnBoardingEntity> = listOf(),
     private val errorValue: Boolean = false,

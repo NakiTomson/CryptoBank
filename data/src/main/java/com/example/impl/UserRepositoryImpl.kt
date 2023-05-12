@@ -18,9 +18,21 @@ class UserRepositoryImpl @Inject constructor(
 
     override val token: Flow<String?> = tokenStorage.getUserTokenFlow()
 
-    override suspend fun isNeedOnBoarding(): Boolean = configStorage.isNeedOnBoarding()
+    override suspend fun isNeedOnBoarding(): Boolean {
+       return configStorage.isNeedOnBoarding()
+    }
 
-    override suspend fun isNeedRegistration(): Boolean = configStorage.isNeedRegistration()
+    override suspend fun setNeedOnBoarding(isShow: Boolean) {
+        configStorage.updateNeedOnBoarding(isShow)
+    }
+
+    override suspend fun isNeedRegistration(): Boolean {
+       return configStorage.isNeedRegistration()
+    }
+
+    override suspend fun setNeedRegistration(isShow: Boolean) {
+        configStorage.updateNeedRegistration(isShow)
+    }
 
     override suspend fun prepareToken() {
         val request = SessionRequest(tokenStorage.getUserToken())

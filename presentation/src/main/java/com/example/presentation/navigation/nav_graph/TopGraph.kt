@@ -17,7 +17,7 @@ fun NavGraphBuilder.topNavGraph(
     navigation(startDestination = TopScreens.Splash.route, route = TopScreens.getGraph()) {
         composable(route = TopScreens.Splash.route) {
             SplashRoute(openOnBoardingRoute = {
-                navController.navigateInclusive(TopScreens.OnBoarding.route, TopScreens.Splash.route)
+                navController.navigate(TopScreens.OnBoarding.route)
             }, openRegistrationRoute = {
                 navController.navigate(AuthenticationScreens.getGraph())
             }, openNavigationRout = {
@@ -29,6 +29,8 @@ fun NavGraphBuilder.topNavGraph(
                 navController.navigate(AuthenticationScreens.getGraph())
             }, openNavigationRoute = {
                 navController.navigateInclusive(TopScreens.Navigation.route, TopScreens.OnBoarding.route)
+            }, popBackStack = {
+                navController.popBackStack()
             }, supportNetworkErrorScreen = Unit)
         }
         composable(route = TopScreens.Navigation.route) {

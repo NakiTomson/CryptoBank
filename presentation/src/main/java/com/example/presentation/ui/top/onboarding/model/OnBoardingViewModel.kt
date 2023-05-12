@@ -2,6 +2,7 @@ package com.example.presentation.ui.top.onboarding.model
 
 import androidx.lifecycle.SavedStateHandle
 import com.example.domain.api.OnBoardingInteractor
+import com.example.domain.api.UserInteractor
 import com.example.entity.OnBoardingEntity
 import com.example.errors.ServerError
 import com.example.presentation.core.SideEffect
@@ -9,6 +10,8 @@ import com.example.presentation.core.StatefulScreenModel
 import com.example.presentation.ui.top.onboarding.event.OnBoardingSideEffect
 import com.example.presentation.ui.top.onboarding.state.OnBoardingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import presentation.R
 import javax.inject.Inject
@@ -17,6 +20,7 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val interceptor: OnBoardingInteractor,
+    private val userInteractor: UserInteractor,
 ) : StatefulScreenModel<OnBoardingState, SideEffect>(OnBoardingState()) {
 
     private var onBoardingScreens: List<OnBoardingEntity> = emptyList()
@@ -26,17 +30,24 @@ class OnBoardingViewModel @Inject constructor(
     init {
         launch {
             getScreens()
+            subscribeToOnBoarding()
         }
     }
 
     private suspend fun getScreens() {
         try {
-            onBoardingScreens = interceptor.getOnBoardingScreens()
-            setButtonTypes(selectedPagePosition)
-            reduceState { getCurrentState().copy(onBoardingScreensValue = onBoardingScreens) }
+            interceptor.getOnBoardingScreens()
         } catch (e: ServerError) {
             reduceState { getCurrentState().copy(errorValue = true) }
         }
+    }
+
+    private suspend fun subscribeToOnBoarding() {
+        interceptor.onBoardings.onEach {
+            onBoardingScreens = it
+            setButtonTypes(selectedPagePosition)
+            reduceState { getCurrentState().copy(onBoardingScreensValue = onBoardingScreens) }
+        }.collect()
     }
 
     private suspend fun setButtonTypes(position: Int) {
@@ -65,14 +76,27 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
+    suspend fun onBackClicked() {
+        when (selectedPagePosition) {
+            0 -> postSideEffect(OnBoardingSideEffect.Back)
+            else -> decrementPosition()
+        }
+    }
+
     private suspend fun incrementPosition() {
         selectedPagePosition += 1
         setButtonTypes(selectedPagePosition)
         reduceState { getCurrentState().copy(selectedPageValue = selectedPagePosition) }
     }
 
+    private suspend fun decrementPosition() {
+        selectedPagePosition -= 1
+        setButtonTypes(selectedPagePosition)
+        reduceState { getCurrentState().copy(selectedPageValue = selectedPagePosition) }
+    }
+
     private suspend fun closeOnBoarding() {
-//        configRepository.isNeedShowOnBoarding = false
+        userInteractor.setNeedOnBoarding(false)
         postSideEffect(OnBoardingSideEffect.OpenRegister)
     }
 

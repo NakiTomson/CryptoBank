@@ -14,9 +14,21 @@ class UserInteractorImpl @Inject constructor(
 
     override val token: Flow<String?> = userRepository.token
 
-    override suspend fun isNeedOnBoarding(): Boolean = userRepository.isNeedOnBoarding()
+    override suspend fun isNeedOnBoarding(): Boolean = withContext(dispatchers.io) {
+        userRepository.isNeedOnBoarding()
+    }
 
-    override suspend fun isNeedRegistration(): Boolean = userRepository.isNeedRegistration()
+    override suspend fun setNeedOnBoarding(isShow: Boolean) = withContext(dispatchers.io) {
+        userRepository.setNeedOnBoarding(isShow)
+    }
+
+    override suspend fun isNeedRegistration(): Boolean = withContext(dispatchers.io) {
+        userRepository.isNeedRegistration()
+    }
+
+    override suspend fun setNeedRegistration(isShow: Boolean) = withContext(dispatchers.io) {
+        userRepository.setNeedRegistration(isShow)
+    }
 
     override suspend fun prepareToken(): Unit = withContext(dispatchers.io) {
         userRepository.prepareToken()

@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface OnBoardingRepository {
 
-    suspend fun getOnBoardingScreens(): List<OnBoardingEntity>
+    val onBoardings: Flow<List<OnBoardingEntity>>
+
+    suspend fun getOnBoardingScreens()
 
 }
