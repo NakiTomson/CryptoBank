@@ -12,6 +12,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
+
+@Composable
+@Preview(showBackground = true)
+private fun SignUpPreview() {
+    SignUpScreen()
+}
+
 @Composable
 fun SignUpScreen(
     singUpClicked: () -> Unit = {},
@@ -30,11 +37,4 @@ fun SignUpScreen(
             fontWeight = FontWeight.Bold
         )
     }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-private fun SignUpPreview() {
-    SignUpScreen()
 }

@@ -27,7 +27,7 @@ fun NavGraphBuilder.authenticationNavGraph(
         }
         composable(route = AuthenticationScreens.Forget.route) {
             ForgetScreen() {
-                navController.navigate(TopScreens.Splash.route)
+                navController.navigate(TopScreens.Navigation.route)
             }
         }
     }

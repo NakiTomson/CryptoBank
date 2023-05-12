@@ -11,16 +11,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.presentation.core_compose.InternetConnectionLostScreen
+import com.example.presentation.theme.Black100
+import com.example.presentation.ui.authentication.log_in.model.SignInViewModel
+import com.example.presentation.ui.top.splash.screen.SplashRoute
+import com.example.presentation.ui.top.splash.state.SplashState
+
+
+@Composable
+fun SignInRoute(
+    singUpClicked: () -> Unit = {},
+    supportNetworkErrorScreen: Unit,
+    viewModel: SignInViewModel = hiltViewModel()
+) {
+    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    InternetConnectionLostScreen({ state.value == SplashState.Error }, {
+
+    }, content = {
+        SignInRoute(singUpClicked, viewModel)
+    }, Black100, Black100, Black100)
+
+}
+
+
+@Composable
+fun SignInRoute(
+    singUpClicked: () -> Unit = {},
+    viewModel: SignInViewModel = hiltViewModel()
+) {
+    SignInScreen(singUpClicked)
+}
 
 @Composable
 fun SignInScreen(
-    singInClicked: () -> Unit = {},
+    singUpClicked: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                singInClicked.invoke()
+                singUpClicked.invoke()
             }, contentAlignment = Alignment.Center
     ) {
         Text(
