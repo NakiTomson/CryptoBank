@@ -59,7 +59,7 @@ import presentation.R
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 @Preview(showBackground = true)
-private fun SplashScreenPreview() {
+private fun OnBoardingScreenPreview() {
     val text = stringResource(R.string.on_boarding_next_action)
     val mock = OnBoardingEntity(text, text, "https://i.ibb.co/VNycWc0/screen-One.jpg")
     OnBoardingScreen(onBoardings = { listOf(mock, mock) })
@@ -201,6 +201,7 @@ fun OnBoardingScreenPager(
     ) {
         OnBoardingPage(onBoardings[state.currentPage])
     }
+
 }
 
 @Composable
@@ -210,8 +211,8 @@ fun OnBoardingPage(item: OnBoardingEntity) {
             model = ImageRequest.Builder(LocalContext.current)
                 .data(item.media)
                 .crossfade(true)
-                .diskCachePolicy(CachePolicy.ENABLED)
-                .memoryCachePolicy(CachePolicy.ENABLED).build(),
+                .diskCachePolicy(CachePolicy.DISABLED)
+                .memoryCachePolicy(CachePolicy.DISABLED).build(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier

@@ -1,6 +1,6 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
-const val kotlinVersion = "1.7.20"
+const val kotlinVersion = "1.8.10"
 
 object AndroidConfig {
     const val applicationId = "com.example.ryzbank"
@@ -49,7 +49,7 @@ object Libraries {
         const val chucker = "3.5.2"
 
         //compose
-        const val composeUi = "1.3.2"
+        const val compose = "1.4.3"
         const val composeViewModel = "2.5.1"
         const val composeNavigation = "2.6.0-alpha04"
         const val composeLiveData = "1.4.0-alpha03"
@@ -70,13 +70,14 @@ object Libraries {
     private const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
 
     //Compose
-    private const val composeUi = "androidx.compose.ui:ui:${Versions.composeUi}"
+    private const val composeUi = "androidx.compose.ui:ui:${Versions.compose}"
+    private const val composefoundation = "androidx.compose.foundation:foundation:${Versions.compose}"
     private const val composeActivity = "androidx.activity:activity-compose:${Versions.composeActivity}"
-    private const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeUi}"
+    private const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
     private const val composeMaterial = "androidx.compose.material:material:${Versions.composeMaterial}"
     private const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial3}"
-    private const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.composeUi}"
-    private const val composeTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.composeUi}"
+    private const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
+    private const val composeTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
     private const val composeViewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.composeViewModel}"
     private const val composeMaterialIcons = "androidx.compose.material:material-icons-extended:${Versions.composeMaterial}"
     private const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"

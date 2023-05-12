@@ -35,7 +35,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.Versions.composeUi
+        kotlinCompilerExtensionVersion = Libraries.Versions.compose
     }
 }
 

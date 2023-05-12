@@ -1,7 +1,6 @@
 import Libraries.addCompose
 import Libraries.addCore
 import Libraries.addHilt
-import Libraries.addNavigation
 
 plugins {
     id("com.android.library")
@@ -17,7 +16,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.Versions.composeUi
+        kotlinCompilerExtensionVersion = Libraries.Versions.compose
     }
 }
 
