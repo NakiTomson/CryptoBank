@@ -17,8 +17,12 @@ fun NavGraphBuilder.authenticationNavGraph(
     navigation(startDestination = AuthenticationScreens.SingIn.route, route = AuthenticationScreens.getGraph()) {
         composable(route = AuthenticationScreens.SingIn.route) {
             LogInRoute(authorizationSuccess = {
+                navController.navigate(TopScreens.Navigation.route)
+            }, createNewAccountClicked = {
                 navController.navigate(AuthenticationScreens.SingUp.route)
-            })
+            }, forgotPasswordClicked = {
+                navController.navigate(AuthenticationScreens.Forget.route)
+            }, supportNetworkErrorScreen = Unit)
         }
         composable(route = AuthenticationScreens.SingUp.route) {
             SignUpScreen() {
@@ -27,7 +31,7 @@ fun NavGraphBuilder.authenticationNavGraph(
         }
         composable(route = AuthenticationScreens.Forget.route) {
             ForgetScreen() {
-                navController.navigate(TopScreens.Navigation.route)
+                navController.navigate(AuthenticationScreens.SingIn.route)
             }
         }
     }

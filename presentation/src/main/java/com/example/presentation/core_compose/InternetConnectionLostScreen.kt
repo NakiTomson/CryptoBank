@@ -12,14 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import presentation.R
 
@@ -34,15 +31,17 @@ fun InternetConnectionLostScreen(
     isShowError: () -> Boolean = { false },
     tryAgainClicked: () -> Unit = {},
     content: @Composable () -> Unit = {},
-    defStatusBarColor: Color = Color.White,
-    errorStatusBarColor: Color = Color.Black,
+    navigationBarColor: Color = Color.Black,
+    errorNavigationBarColor: Color = navigationBarColor,
+    statusBarColor: Color = Color.Black,
+    errorStatusBarColor: Color = statusBarColor,
     background: Color = Color.Black,
 ) {
     content()
     val systemUiController = rememberSystemUiController()
     SideEffect {
-        systemUiController.setStatusBarColor(color = if (isShowError.invoke()) errorStatusBarColor else defStatusBarColor)
-        systemUiController.setNavigationBarColor(defStatusBarColor)
+        systemUiController.setStatusBarColor(color = if (isShowError.invoke()) errorStatusBarColor else statusBarColor)
+        systemUiController.setNavigationBarColor(navigationBarColor)
     }
     if (isShowError.invoke()) {
         Box(Modifier.background(background), contentAlignment = Alignment.Center) {
