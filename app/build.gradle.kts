@@ -1,11 +1,13 @@
 import Libraries.addCompose
 import Libraries.addCore
+import Libraries.addFirebaseBom
 import Libraries.addHilt
 
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
 }
 
@@ -47,4 +49,5 @@ dependencies {
     addCore()
     addCompose()
     addHilt()
+    addFirebaseBom()
 }

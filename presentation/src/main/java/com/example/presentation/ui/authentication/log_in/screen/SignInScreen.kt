@@ -1,13 +1,14 @@
 package com.example.presentation.ui.authentication.log_in.screen
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,17 +22,17 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.CacheDrawScope
@@ -58,18 +59,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.presentation.core.EmptySideEffect
 import com.example.presentation.core_compose.InternetConnectionLostScreen
 import com.example.presentation.theme.Black100
 import com.example.presentation.theme.Black300
 import com.example.presentation.theme.White100
+import com.example.presentation.ui.authentication.log_in.event.SignInSideEffect
 import com.example.presentation.ui.authentication.log_in.model.SignInViewModel
 import com.example.presentation.ui.top.splash.state.SplashState
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import kotlinx.coroutines.launch
 import presentation.R
 
 
 @Composable
 @Preview(showBackground = true, device = "id:pixel_6_pro")
-private fun SignUpPreview() {
+private fun SignInPreview() {
     LogInScreen(modifier = Modifier.background(Black300))
 }
 
@@ -96,20 +104,50 @@ fun LogInRoute(
     forgotClicked: () -> Unit = {},
     viewModel: SignInViewModel = hiltViewModel()
 ) {
+    val events = viewModel.sideEffectFlow.collectAsStateWithLifecycle(EmptySideEffect)
+    val coroutineScope = rememberCoroutineScope()
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        coroutineScope.launch { viewModel.handleAttemptToAuthorization(it) }
+    }
+
+    LaunchedEffect(viewModel) {
+        snapshotFlow { events.value }
+            .collect {
+                when (it) {
+                    is SignInSideEffect.OpenResultLauncher -> launcher.launch(it.intent)
+                    is SignInSideEffect.AuthorizationSuccess -> authorizationSuccess.invoke()
+                }
+            }
+    }
+
     val logInModifier = Modifier
         .background(Black300)
         .fillMaxSize()
 
-    LogInScreen(authorizationSuccess, createNewAccountClicked, forgotClicked, logInModifier)
+    LogInScreen(
+        logInModifier,
+        authorizationSuccess,
+        createNewAccountClicked,
+        forgotClicked,
+        onGoogleAuthorizationClicked = {
+            coroutineScope.launch { viewModel.onGoogleAuthorizationClicked() }
+        },
+        onFacebookAuthorizationClicked = {
+
+        }
+    )
 }
 
 
 @Composable
 fun LogInScreen(
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
     forgotClicked: () -> Unit = {},
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    onGoogleAuthorizationClicked: () -> Unit = {},
+    onFacebookAuthorizationClicked: () -> Unit = {},
 ) {
     Box(modifier = modifier) {
         Image(
@@ -121,7 +159,7 @@ fun LogInScreen(
                 .align(Alignment.TopCenter)
                 .padding(top = 30.dp)
         )
-        FormAuthorization(authorizationSuccess, createNewAccountClicked, forgotClicked)
+        FormAuthorization(authorizationSuccess, createNewAccountClicked, forgotClicked, onGoogleAuthorizationClicked)
     }
 }
 
@@ -131,6 +169,7 @@ fun FormAuthorization(
     authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
     forgotClicked: () -> Unit = {},
+    onGoogleAuthorizationClicked: () -> Unit = {},
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Column(
@@ -230,7 +269,7 @@ fun FormAuthorization(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        OtherAuthorizationMethod(Modifier.padding(bottom = 20.dp))
+        OtherAuthorizationMethod(Modifier.padding(bottom = 20.dp), onGoogleAuthorizationClicked)
 
         Text(
             buildAnnotatedString {
@@ -252,7 +291,8 @@ fun FormAuthorization(
 
 @Composable
 private fun OtherAuthorizationMethod(
-    modifier: Modifier
+    modifier: Modifier,
+    onGoogleAuthorizationClicked: () -> Unit = {},
 ) {
     Row(
         modifier
@@ -265,7 +305,9 @@ private fun OtherAuthorizationMethod(
                 .padding(start = 16.dp, end = 8.dp)
                 .weight(1f)
                 .height(50.dp),
-            onClick = { },
+            onClick = {
+                onGoogleAuthorizationClicked.invoke()
+            },
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black100),
             border = BorderStroke(2.dp, Black300)
         ) {

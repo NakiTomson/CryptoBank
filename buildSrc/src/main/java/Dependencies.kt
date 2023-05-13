@@ -47,6 +47,8 @@ object Libraries {
         const val okhttp3 = "4.10.0"
         const val logging_interceptor = "4.10.0"
         const val chucker = "3.5.2"
+        const val firebaseBom = "26.1.1"
+        const val firebaseServicesAuth = "20.5.0"
 
         //compose
         const val compose = "1.4.3"
@@ -125,6 +127,11 @@ object Libraries {
     const val chucker = "com.github.chuckerteam.chucker:library:${Versions.chucker}"
     const val chuckerNoOp = "com.github.chuckerteam.chucker:library-no-op:${Versions.chucker}"
 
+    //FireBase
+    const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
+    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
+    const val firebaseServicesAuth = "com.google.android.gms:play-services-auth:${Versions.firebaseServicesAuth}"
+
     fun DependencyHandler.addCore() {
         implementation(kotlin)
         implementation(coroutines)
@@ -185,6 +192,11 @@ object Libraries {
         implementation(logging_interceptor)
         debugImplementation(chucker)
         releaseImplementation(chuckerNoOp)
+    }
+
+    fun DependencyHandler.addFirebaseBom(){
+        implementation(platform(firebaseBom))
+        implementation(firebaseAuth)
     }
 }
 

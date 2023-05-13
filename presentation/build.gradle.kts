@@ -1,5 +1,6 @@
 import Libraries.addCompose
 import Libraries.addCore
+import Libraries.addFirebaseBom
 import Libraries.addHilt
 
 plugins {
@@ -23,9 +24,11 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
+    implementation(Libraries.firebaseServicesAuth)
     addCore()
     addCompose()
     addHilt()
+    addFirebaseBom()
     implementation(Libraries.accompanistPager)
     implementation(Libraries.accompanistIndicators)
     implementation(Libraries.accompanistPermissions)
