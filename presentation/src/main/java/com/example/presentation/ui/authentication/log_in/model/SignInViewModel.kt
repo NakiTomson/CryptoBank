@@ -2,6 +2,7 @@ package com.example.presentation.ui.authentication.log_in.model
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.SavedStateHandle
 import com.example.domain.api.UserInteractor
@@ -15,8 +16,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,7 +39,7 @@ class SignInViewModel @Inject constructor(
     private val googleAccount = GoogleSignIn.getLastSignedInAccount(context)
 
     private val isAuthorized: Boolean
-        get() = getAuthorized() != null
+        get() = isGoogleAuthorized || isFireBaseAuthorized
 
     private val isGoogleAuthorized: Boolean
         get() = getGoogleAuthorized() != null
@@ -62,9 +61,6 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun getAuthorized(): UserEntity? {
-        return getFirebaseAuthorized() ?: getGoogleAuthorized()
-    }
 
     private fun getFirebaseAuthorized(): UserEntity? {
         return UserEntity(
@@ -110,4 +106,18 @@ class SignInViewModel @Inject constructor(
     suspend fun onFacebookAuthorizationClicked() {
         postSideEffect(SignInSideEffect.AuthorizationError)
     }
+
+    suspend fun onFireBaseAuthorizationClicked(email: String?, password: String?) {
+        reduceState {
+            this.getCurrentState().copy(emailErrorValue = isValidEmail(email).not(), passwordErrorValue = isValidPassword(password).not())
+        }
+
+
+    }
+
+    private fun isValidEmail(email: String?): Boolean =
+        !(email.isNullOrBlank() || email.contains("@").not())
+
+    private fun isValidPassword(password: String?): Boolean =
+        !(password.isNullOrBlank() || password.length < 4)
 }

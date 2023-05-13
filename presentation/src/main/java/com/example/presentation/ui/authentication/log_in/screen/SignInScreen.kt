@@ -98,12 +98,14 @@ fun LogInRoute(
 fun LogInRoute(
     authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
-    forgotClicked: () -> Unit = {},
+    onForgotPasswordClicked: () -> Unit = {},
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val events = viewModel.sideEffectFlow.collectAsStateWithLifecycle(EmptySideEffect)
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
     val isLoading = state.value.loading.collectAsStateWithLifecycle()
+    val isWrongEmail = state.value.emailWrong.collectAsStateWithLifecycle()
+    val isWrongPassword = state.value.passwordWrong.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -126,30 +128,36 @@ fun LogInRoute(
         .fillMaxSize()
 
     LogInScreen(
-        logInModifier,
-        { isLoading.value },
-        authorizationSuccess,
-        createNewAccountClicked,
-        forgotClicked,
+        modifier = logInModifier,
+        isLoading = { isLoading.value },
+        createNewAccountClicked = createNewAccountClicked,
+        onForgotPasswordClicked = onForgotPasswordClicked,
         onGoogleAuthorizationClicked = {
             coroutineScope.launch { viewModel.onGoogleAuthorizationClicked() }
         },
+        onFireBaseAuthorizationClicked = {
+            coroutineScope.launch { viewModel.onFireBaseAuthorizationClicked(it?.first, it?.second) }
+        },
         onFacebookAuthorizationClicked = {
             coroutineScope.launch { viewModel.onFacebookAuthorizationClicked() }
-        }
+        },
+        isWrongEmail = { isWrongEmail.value },
+        isWrongPassword = { isWrongPassword.value },
     )
 }
 
 
 @Composable
 fun LogInScreen(
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
     isLoading: () -> Boolean = { false },
-    authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
-    forgotClicked: () -> Unit = {},
+    onForgotPasswordClicked: () -> Unit = {},
     onGoogleAuthorizationClicked: () -> Unit = {},
+    onFireBaseAuthorizationClicked: (Pair<String, String>?) -> Unit = { null to null },
     onFacebookAuthorizationClicked: () -> Unit = {},
+    isWrongEmail: () -> Boolean = { false },
+    isWrongPassword: () -> Boolean = { false },
 ) {
     Box(modifier = modifier) {
         Image(
@@ -163,9 +171,12 @@ fun LogInScreen(
         )
         FormAuthorization(
             createNewAccountClicked,
-            forgotClicked,
+            onForgotPasswordClicked,
             onGoogleAuthorizationClicked,
-            onFacebookAuthorizationClicked
+            onFireBaseAuthorizationClicked,
+            onFacebookAuthorizationClicked,
+            isWrongEmail,
+            isWrongPassword
         )
         CircularProgressBar(
             Modifier.align(Alignment.Center),
@@ -179,10 +190,13 @@ fun LogInScreen(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun FormAuthorization(
-    createNewAccountClicked: () -> Unit = {},
-    forgotClicked: () -> Unit = {},
-    onGoogleAuthorizationClicked: () -> Unit = {},
+    createNewAccountClicked: () -> Unit,
+    onForgotPasswordClicked: () -> Unit,
+    onGoogleAuthorizationClicked: () -> Unit,
+    onFireBaseAuthorizationClicked: (Pair<String, String>?) -> Unit,
     onFacebookAuthorizationClicked: () -> Unit = {},
+    isWrongEmail: () -> Boolean,
+    isWrongPassword: () -> Boolean,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Column(
@@ -190,6 +204,7 @@ fun FormAuthorization(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         var password by remember { mutableStateOf(TextFieldValue("")) }
         var email by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -218,6 +233,7 @@ fun FormAuthorization(
             label = {
                 Text(text = stringResource(R.string.email), color = White100)
             },
+            isError = isWrongEmail.invoke(),
             onValueChange = { email = it },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = White100,
@@ -241,6 +257,7 @@ fun FormAuthorization(
             onValueChange = { it ->
                 password = it
             },
+            isError = isWrongPassword.invoke(),
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = White100,
                 unfocusedIndicatorColor = Black300,
@@ -252,7 +269,7 @@ fun FormAuthorization(
                 Text(
                     text = stringResource(R.string.forgot),
                     modifier = Modifier.clickable {
-                        forgotClicked.invoke()
+                        onForgotPasswordClicked.invoke()
                     },
                     color = Color.White,
                     maxLines = 1
@@ -268,7 +285,7 @@ fun FormAuthorization(
                 .height(50.dp),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black300),
             onClick = {
-
+                onFireBaseAuthorizationClicked.invoke(email.text to password.text)
             }
         ) {
             Text(text = stringResource(R.string.log_in), color = Color.White, maxLines = 1)

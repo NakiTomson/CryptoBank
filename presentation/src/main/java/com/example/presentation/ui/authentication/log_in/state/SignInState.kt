@@ -10,8 +10,12 @@ import kotlinx.coroutines.flow.StateFlow
 data class SignInState(
     private val errorValue: Boolean = false,
     private val loadingValue: Boolean = false,
+    private val emailErrorValue: Boolean = false,
+    private val passwordErrorValue: Boolean = false,
 ) : BaseState {
 
     val error: StateFlow<Boolean> = MutableStateFlow(errorValue)
     val loading: StateFlow<Boolean> = MutableStateFlow(loadingValue)
+    val emailWrong: StateFlow<Boolean> = MutableStateFlow(emailErrorValue)
+    val passwordWrong: StateFlow<Boolean> = MutableStateFlow(passwordErrorValue)
 }
