@@ -60,17 +60,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.presentation.core.EmptySideEffect
+import com.example.presentation.core_compose.CircularProgressBar
 import com.example.presentation.core_compose.InternetConnectionLostScreen
 import com.example.presentation.theme.Black100
 import com.example.presentation.theme.Black300
 import com.example.presentation.theme.White100
 import com.example.presentation.ui.authentication.log_in.event.SignInSideEffect
 import com.example.presentation.ui.authentication.log_in.model.SignInViewModel
-import com.example.presentation.ui.top.splash.state.SplashState
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 import presentation.R
 
@@ -90,7 +86,8 @@ fun LogInRoute(
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
-    InternetConnectionLostScreen({ state.value == SplashState.Error }, {
+    val isError = state.value.error.collectAsStateWithLifecycle()
+    InternetConnectionLostScreen({ isError.value }, {
     }, content = {
         LogInRoute(authorizationSuccess, createNewAccountClicked, forgotPasswordClicked, viewModel)
     }, navigationBarColor = Black100, statusBarColor = Black300)
@@ -105,10 +102,13 @@ fun LogInRoute(
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val events = viewModel.sideEffectFlow.collectAsStateWithLifecycle(EmptySideEffect)
+    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    val isLoading = state.value.loading.collectAsStateWithLifecycle()
+
     val coroutineScope = rememberCoroutineScope()
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        coroutineScope.launch { viewModel.handleAttemptToAuthorization(it) }
+        coroutineScope.launch { viewModel.handleAuthorizationResult(it) }
     }
 
     LaunchedEffect(viewModel) {
@@ -127,6 +127,7 @@ fun LogInRoute(
 
     LogInScreen(
         logInModifier,
+        { isLoading.value },
         authorizationSuccess,
         createNewAccountClicked,
         forgotClicked,
@@ -134,7 +135,7 @@ fun LogInRoute(
             coroutineScope.launch { viewModel.onGoogleAuthorizationClicked() }
         },
         onFacebookAuthorizationClicked = {
-
+            coroutineScope.launch { viewModel.onFacebookAuthorizationClicked() }
         }
     )
 }
@@ -143,6 +144,7 @@ fun LogInRoute(
 @Composable
 fun LogInScreen(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    isLoading: () -> Boolean = { false },
     authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
     forgotClicked: () -> Unit = {},
@@ -159,17 +161,28 @@ fun LogInScreen(
                 .align(Alignment.TopCenter)
                 .padding(top = 30.dp)
         )
-        FormAuthorization(authorizationSuccess, createNewAccountClicked, forgotClicked, onGoogleAuthorizationClicked)
+        FormAuthorization(
+            createNewAccountClicked,
+            forgotClicked,
+            onGoogleAuthorizationClicked,
+            onFacebookAuthorizationClicked
+        )
+        CircularProgressBar(
+            Modifier.align(Alignment.Center),
+            isLoading = isLoading,
+            colorProgress = White100,
+            colorIndicator = Black300
+        )
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun FormAuthorization(
-    authorizationSuccess: () -> Unit = {},
     createNewAccountClicked: () -> Unit = {},
     forgotClicked: () -> Unit = {},
     onGoogleAuthorizationClicked: () -> Unit = {},
+    onFacebookAuthorizationClicked: () -> Unit = {},
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Column(
@@ -255,7 +268,7 @@ fun FormAuthorization(
                 .height(50.dp),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black300),
             onClick = {
-                authorizationSuccess.invoke()
+
             }
         ) {
             Text(text = stringResource(R.string.log_in), color = Color.White, maxLines = 1)
@@ -293,6 +306,7 @@ fun FormAuthorization(
 private fun OtherAuthorizationMethod(
     modifier: Modifier,
     onGoogleAuthorizationClicked: () -> Unit = {},
+    onFacebookAuthorizationClicked: () -> Unit = {},
 ) {
     Row(
         modifier
@@ -329,7 +343,9 @@ private fun OtherAuthorizationMethod(
                 .padding(start = 8.dp, end = 16.dp)
                 .height(50.dp)
                 .weight(1f),
-            onClick = { },
+            onClick = {
+                onFacebookAuthorizationClicked.invoke()
+            },
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black100),
             border = BorderStroke(2.dp, Black300)
         ) {
@@ -345,6 +361,7 @@ private fun OtherAuthorizationMethod(
         }
     }
 }
+
 
 fun getDrawBackgroundPath(cacheDrawScope: CacheDrawScope): Path {
     with(cacheDrawScope) {

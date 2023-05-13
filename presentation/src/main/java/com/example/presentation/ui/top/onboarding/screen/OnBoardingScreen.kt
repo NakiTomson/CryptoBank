@@ -158,8 +158,7 @@ fun OnBoardingScreen(
             OnBoardingScreenPager(
                 onBoardings.invoke(),
                 pagerState,
-                Modifier
-                    .weight(1f)
+                Modifier.weight(1f)
             )
             OutlinedButton(
                 shape = RoundedCornerShape(30.dp),
@@ -201,7 +200,6 @@ fun OnBoardingScreenPager(
     ) {
         OnBoardingPage(onBoardings[state.currentPage])
     }
-
 }
 
 @Composable
@@ -217,9 +215,10 @@ fun OnBoardingPage(item: OnBoardingEntity) {
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .padding(top = 60.dp)
+                .weight(3f)
                 .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(42.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = item.title,
             color = Color.White,

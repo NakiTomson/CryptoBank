@@ -23,7 +23,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setNeedOnBoarding(isShow: Boolean) {
-        configStorage.updateNeedOnBoarding(isShow)
+//        configStorage.updateNeedOnBoarding(isShow)
     }
 
     override suspend fun isNeedRegistration(): Boolean {

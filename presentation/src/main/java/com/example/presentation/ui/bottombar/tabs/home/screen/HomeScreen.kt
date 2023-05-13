@@ -10,12 +10,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
-import com.example.presentation.ui.top.navigation.model.NavigationViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 @Composable
@@ -23,6 +25,12 @@ fun HomeScreen(
     onHomeClicked: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+    val gsc = GoogleSignIn.getClient(context, gso)
+
+    val acct = GoogleSignIn.getLastSignedInAccount(context)
 
     LaunchedEffect(key1 = viewModel, block = {
 
@@ -33,7 +41,7 @@ fun HomeScreen(
             modifier = Modifier.clickable {
                 onHomeClicked.invoke()
             },
-            text = "Home",
+            text = acct?.email ?: "null",
             color = Color.Red,
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.Bold
