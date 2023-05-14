@@ -15,43 +15,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.entity.UserEntity
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 @Composable
-fun HomeScreen(
+@Preview(showBackground = true)
+private fun HomeScreenPreview() {
+    HomeScreen()
+}
+
+@Composable
+fun HomeRoute(
     onHomeClicked: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-
-    val context = LocalContext.current
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-    val gsc = GoogleSignIn.getClient(context, gso)
-
-    val acct = GoogleSignIn.getLastSignedInAccount(context)
+    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    val userState = state.value.user.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel, block = {
 
     })
+    HomeScreen(onHomeClicked) { userState.value }
+}
 
+@Composable
+fun HomeScreen(
+    onHomeClicked: () -> Unit = {},
+    user: () -> UserEntity? = { null }
+) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            modifier = Modifier.clickable {
-                onHomeClicked.invoke()
-            },
-            text = acct?.email ?: "null",
+            modifier = Modifier.clickable { onHomeClicked.invoke() },
+            text = user.invoke().toString(),
             color = Color.Red,
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.Bold
         )
     }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-private fun HomeScreenPreview() {
-    HomeScreen(viewModel = HomeViewModel(SavedStateHandle()))
 }

@@ -21,7 +21,5 @@ abstract class StatefulScreenModel<STATE : Any, SIDE_EFFECT : Any>(initialState:
     suspend fun postSideEffect(sideEffect: SIDE_EFFECT) =
         coroutineScope { launch(Dispatchers.Main) { _sideEffectFlow.emit(sideEffect) } }
 
-    fun getCurrentState(): STATE {
-       return stateFlow.value
-    }
+    fun getState(): STATE = stateFlow.value
 }

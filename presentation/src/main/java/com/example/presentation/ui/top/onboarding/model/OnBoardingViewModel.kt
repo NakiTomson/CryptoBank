@@ -1,6 +1,5 @@
 package com.example.presentation.ui.top.onboarding.model
 
-import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import com.example.domain.api.OnBoardingInteractor
@@ -40,7 +39,7 @@ class OnBoardingViewModel @Inject constructor(
         try {
             interceptor.getOnBoardingScreens()
         } catch (e: ServerError) {
-            reduceState { getCurrentState().copy(errorValue = true) }
+            reduceState { getState().copy(errorValue = true) }
         }
     }
 
@@ -48,21 +47,21 @@ class OnBoardingViewModel @Inject constructor(
         interceptor.onBoardings.onEach {
             onBoardingScreens = it
             setButtonTypes(selectedPagePosition)
-            reduceState { getCurrentState().copy(onBoardingScreensValue = onBoardingScreens) }
+            reduceState { getState().copy(onBoardingScreensValue = onBoardingScreens) }
         }.collect()
     }
 
     private suspend fun setButtonTypes(position: Int) {
         when (position) {
-            ActionTypes.SKIP.ordinal -> reduceState { getCurrentState().copy(buttonTypeValue = ActionTypes.SKIP) }
-            ActionTypes.OK.ordinal -> reduceState { getCurrentState().copy(buttonTypeValue = ActionTypes.SKIP) }
-            else -> reduceState { getCurrentState().copy(buttonTypeValue = ActionTypes.OK) }
+            ActionTypes.SKIP.ordinal -> reduceState { getState().copy(buttonTypeValue = ActionTypes.SKIP) }
+            ActionTypes.OK.ordinal -> reduceState { getState().copy(buttonTypeValue = ActionTypes.SKIP) }
+            else -> reduceState { getState().copy(buttonTypeValue = ActionTypes.OK) }
         }
     }
 
     fun onTryAgainClicked() {
         viewModelScope {
-            reduceState { getCurrentState().copy(errorValue = false) }
+            reduceState { getState().copy(errorValue = false) }
             getScreens()
         }
     }
@@ -88,13 +87,13 @@ class OnBoardingViewModel @Inject constructor(
     private suspend fun incrementPosition() {
         selectedPagePosition += 1
         setButtonTypes(selectedPagePosition)
-        reduceState { getCurrentState().copy(selectedPageValue = selectedPagePosition) }
+        reduceState { getState().copy(selectedPageValue = selectedPagePosition) }
     }
 
     private suspend fun decrementPosition() {
         selectedPagePosition -= 1
         setButtonTypes(selectedPagePosition)
-        reduceState { getCurrentState().copy(selectedPageValue = selectedPagePosition) }
+        reduceState { getState().copy(selectedPageValue = selectedPagePosition) }
     }
 
     private suspend fun closeOnBoarding() {

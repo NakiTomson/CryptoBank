@@ -19,7 +19,7 @@ fun NavGraphBuilder.topNavGraph(
             SplashRoute(openOnBoardingRoute = {
                 navController.navigate(TopScreens.OnBoarding.route)
             }, openRegistrationRoute = {
-                navController.navigate(AuthenticationScreens.getGraph())
+                navController.navigateInclusive(AuthenticationScreens.getGraph(), TopScreens.Splash.route)
             }, openNavigationRout = {
                 navController.navigateInclusive(TopScreens.Navigation.route, TopScreens.OnBoarding.route)
             }, supportNetworkErrorScreen = Unit)

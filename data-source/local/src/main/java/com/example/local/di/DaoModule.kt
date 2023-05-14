@@ -1,6 +1,7 @@
 package com.example.local.di
 
 import com.example.local.dao.OnBoardingDao
+import com.example.local.dao.UserDao
 import com.example.local.database.ApplicationDatabase
 import dagger.Module
 import dagger.Provides
@@ -16,5 +17,11 @@ internal object DaoModule {
     @Singleton
     fun provideDashBoardDao(db: ApplicationDatabase): OnBoardingDao {
         return db.getOnboardDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(db: ApplicationDatabase): UserDao {
+        return db.getUserDao()
     }
 }

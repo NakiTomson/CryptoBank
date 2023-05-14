@@ -61,7 +61,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.presentation.core.EmptySideEffect
 import com.example.presentation.core_compose.CircularProgressBar
+import com.example.presentation.core_compose.CustomAlert
 import com.example.presentation.core_compose.InternetConnectionLostScreen
+import com.example.presentation.core_compose.rememberCustomAlertState
 import com.example.presentation.theme.Black100
 import com.example.presentation.theme.Black300
 import com.example.presentation.theme.White100
@@ -69,7 +71,6 @@ import com.example.presentation.ui.authentication.log_in.event.SignInSideEffect
 import com.example.presentation.ui.authentication.log_in.model.SignInViewModel
 import kotlinx.coroutines.launch
 import presentation.R
-
 
 @Composable
 @Preview(showBackground = true, device = "id:pixel_6_pro")
@@ -86,7 +87,7 @@ fun LogInRoute(
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
-    val isError = state.value.error.collectAsStateWithLifecycle()
+    val isError = state.value.isError.collectAsStateWithLifecycle()
     InternetConnectionLostScreen({ isError.value }, {
     }, content = {
         LogInRoute(authorizationSuccess, createNewAccountClicked, forgotPasswordClicked, viewModel)
@@ -103,22 +104,37 @@ fun LogInRoute(
 ) {
     val events = viewModel.sideEffectFlow.collectAsStateWithLifecycle(EmptySideEffect)
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
-    val isLoading = state.value.loading.collectAsStateWithLifecycle()
-    val isWrongEmail = state.value.emailWrong.collectAsStateWithLifecycle()
-    val isWrongPassword = state.value.passwordWrong.collectAsStateWithLifecycle()
+    val isLoading = state.value.isLoading.collectAsStateWithLifecycle()
+    val isValidEmail = state.value.isValidEmail.collectAsStateWithLifecycle()
+    val isValidPassword = state.value.isValidPassword.collectAsStateWithLifecycle()
+    val alertState = state.value.alertState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        coroutineScope.launch { viewModel.handleAuthorizationResult(it) }
-    }
+    val rememberAlertState =
+        rememberCustomAlertState(state = alertState.value,
+            onDismiss = {
+                coroutineScope.launch { viewModel.onAlertDismiss() }
+            }, onPositive = {
+                coroutineScope.launch { viewModel.onPositiveClicked(it) }
+            }, onCompiled = {
+                coroutineScope.launch { viewModel.onAlertCompiled() }
+            })
+
+    val googleAuthorizationLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            coroutineScope.launch { viewModel.googleAuthorizationResult(it) }
+        }
+
 
     LaunchedEffect(viewModel) {
         snapshotFlow { events.value }
             .collect {
                 when (it) {
-                    is SignInSideEffect.OpenResultLauncher -> launcher.launch(it.intent)
+                    is SignInSideEffect.GoogleResultLauncher -> googleAuthorizationLauncher.launch(it.intent)
                     is SignInSideEffect.AuthorizationSuccess -> authorizationSuccess.invoke()
+                    is SignInSideEffect.OpenSignUp -> createNewAccountClicked.invoke()
+                    is SignInSideEffect.AuthorizationError -> {}
                 }
             }
     }
@@ -135,15 +151,16 @@ fun LogInRoute(
         onGoogleAuthorizationClicked = {
             coroutineScope.launch { viewModel.onGoogleAuthorizationClicked() }
         },
-        onFireBaseAuthorizationClicked = {
-            coroutineScope.launch { viewModel.onFireBaseAuthorizationClicked(it?.first, it?.second) }
+        onFireBaseAuthorizationClicked = { email, pass ->
+            coroutineScope.launch { viewModel.onFireBaseAuthorizationClicked(email, pass) }
         },
         onFacebookAuthorizationClicked = {
             coroutineScope.launch { viewModel.onFacebookAuthorizationClicked() }
         },
-        isWrongEmail = { isWrongEmail.value },
-        isWrongPassword = { isWrongPassword.value },
+        isValidEmail = { isValidEmail.value },
+        isValidPassword = { isValidPassword.value },
     )
+    CustomAlert(rememberAlertState)
 }
 
 
@@ -154,10 +171,10 @@ fun LogInScreen(
     createNewAccountClicked: () -> Unit = {},
     onForgotPasswordClicked: () -> Unit = {},
     onGoogleAuthorizationClicked: () -> Unit = {},
-    onFireBaseAuthorizationClicked: (Pair<String, String>?) -> Unit = { null to null },
+    onFireBaseAuthorizationClicked: (String, String) -> Unit = { email, pass -> },
     onFacebookAuthorizationClicked: () -> Unit = {},
-    isWrongEmail: () -> Boolean = { false },
-    isWrongPassword: () -> Boolean = { false },
+    isValidEmail: () -> Boolean = { false },
+    isValidPassword: () -> Boolean = { false },
 ) {
     Box(modifier = modifier) {
         Image(
@@ -175,8 +192,8 @@ fun LogInScreen(
             onGoogleAuthorizationClicked,
             onFireBaseAuthorizationClicked,
             onFacebookAuthorizationClicked,
-            isWrongEmail,
-            isWrongPassword
+            isValidEmail,
+            isValidPassword
         )
         CircularProgressBar(
             Modifier.align(Alignment.Center),
@@ -193,10 +210,10 @@ fun FormAuthorization(
     createNewAccountClicked: () -> Unit,
     onForgotPasswordClicked: () -> Unit,
     onGoogleAuthorizationClicked: () -> Unit,
-    onFireBaseAuthorizationClicked: (Pair<String, String>?) -> Unit,
+    onFireBaseAuthorizationClicked: (String, String) -> Unit,
     onFacebookAuthorizationClicked: () -> Unit = {},
-    isWrongEmail: () -> Boolean,
-    isWrongPassword: () -> Boolean,
+    isValidEmail: () -> Boolean,
+    isValidPassword: () -> Boolean,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Column(
@@ -229,11 +246,11 @@ fun FormAuthorization(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
                 .fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             label = {
                 Text(text = stringResource(R.string.email), color = White100)
             },
-            isError = isWrongEmail.invoke(),
+            isError = isValidEmail.invoke().not(),
             onValueChange = { email = it },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = White100,
@@ -257,7 +274,7 @@ fun FormAuthorization(
             onValueChange = { it ->
                 password = it
             },
-            isError = isWrongPassword.invoke(),
+            isError = isValidPassword.invoke().not(),
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = White100,
                 unfocusedIndicatorColor = Black300,
@@ -285,7 +302,7 @@ fun FormAuthorization(
                 .height(50.dp),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black300),
             onClick = {
-                onFireBaseAuthorizationClicked.invoke(email.text to password.text)
+                onFireBaseAuthorizationClicked.invoke(email.text, password.text)
             }
         ) {
             Text(text = stringResource(R.string.log_in), color = Color.White, maxLines = 1)
@@ -299,7 +316,11 @@ fun FormAuthorization(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        OtherAuthorizationMethod(Modifier.padding(bottom = 20.dp), onGoogleAuthorizationClicked)
+        AuthorizationMethods(
+            Modifier.padding(bottom = 20.dp),
+            onGoogleAuthorizationClicked,
+            onFacebookAuthorizationClicked
+        )
 
         Text(
             buildAnnotatedString {
@@ -320,15 +341,12 @@ fun FormAuthorization(
 }
 
 @Composable
-private fun OtherAuthorizationMethod(
+private fun AuthorizationMethods(
     modifier: Modifier,
     onGoogleAuthorizationClicked: () -> Unit = {},
     onFacebookAuthorizationClicked: () -> Unit = {},
 ) {
-    Row(
-        modifier
-            .padding(bottom = 20.dp)
-    ) {
+    Row(modifier.padding(bottom = 20.dp)) {
         OutlinedButton(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier

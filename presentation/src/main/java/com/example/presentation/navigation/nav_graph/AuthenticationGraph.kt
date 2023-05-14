@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.example.presentation.navigation.navigateInclusive
 import com.example.presentation.navigation.sreens.AuthenticationScreens
 import com.example.presentation.navigation.sreens.TopScreens
 import com.example.presentation.ui.authentication.forget.screen.ForgetScreen
@@ -17,7 +18,7 @@ fun NavGraphBuilder.authenticationNavGraph(
     navigation(startDestination = AuthenticationScreens.SingIn.route, route = AuthenticationScreens.getGraph()) {
         composable(route = AuthenticationScreens.SingIn.route) {
             LogInRoute(authorizationSuccess = {
-                navController.navigate(TopScreens.Navigation.route)
+                navController.navigateInclusive(TopScreens.Navigation.route, AuthenticationScreens.SingIn.route)
             }, createNewAccountClicked = {
                 navController.navigate(AuthenticationScreens.SingUp.route)
             }, forgotPasswordClicked = {
