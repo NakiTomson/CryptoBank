@@ -98,7 +98,6 @@ class SignInViewModel @Inject constructor(
         postSideEffect(SignInSideEffect.GoogleResultLauncher(signInIntent))
     }
 
-
     suspend fun onFacebookAuthorizationClicked() {
         if (isFireBaseAuthorized) {
             postSideEffect(SignInSideEffect.AuthorizationSuccess)
@@ -165,10 +164,6 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    suspend fun facebookAuthorizationResult(result: ActivityResult) {
-
-    }
-
     suspend fun onAlertDismiss() {
         onAlertCompiled()
     }
@@ -177,7 +172,7 @@ class SignInViewModel @Inject constructor(
         reduceState { getState().copy(alertStateValue = getState().getAlert().copyDef(isVisibleValue = false)) }
     }
 
-    suspend fun onPositiveClicked(event: SignInSideEffect?) {
+    suspend fun onPositiveClicked(event: SideEffect?) {
         reduceState { getState().copy(alertStateValue = getState().getAlert().copyDef(isVisibleValue = false)) }
         delay(100)
         event?.let { postSideEffect(it) }

@@ -108,7 +108,6 @@ fun LogInRoute(
     val isValidEmail = state.value.isValidEmail.collectAsStateWithLifecycle()
     val isValidPassword = state.value.isValidPassword.collectAsStateWithLifecycle()
     val alertState = state.value.alertState.collectAsStateWithLifecycle()
-
     val coroutineScope = rememberCoroutineScope()
 
     val rememberAlertState =
@@ -125,7 +124,6 @@ fun LogInRoute(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             coroutineScope.launch { viewModel.googleAuthorizationResult(it) }
         }
-
 
     LaunchedEffect(viewModel) {
         snapshotFlow { events.value }

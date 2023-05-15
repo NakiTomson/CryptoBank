@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.presentation.core.SideEffect
 import com.example.presentation.ui.authentication.log_in.event.SignInSideEffect
 import presentation.R
 
@@ -83,8 +84,8 @@ fun rememberUpdatedStateCustomAlertState(
     description: String = stringResource(descriptionRes),
     positiveValue: String = stringResource(id = R.string.ok),
     negativeValue: String = stringResource(id = R.string.cancel),
-    onPositive: (SignInSideEffect?) -> Unit = {},
-    onDismiss: (SignInSideEffect?) -> Unit = {},
+    onPositive: (SideEffect?) -> Unit = {},
+    onDismiss: (SideEffect?) -> Unit = {},
     onCompiled: () -> Unit = {},
 ): CustomAlertState {
     val state = CustomAlertState(
@@ -109,8 +110,8 @@ fun rememberCustomAlertState(
     description: String = stringResource(descriptionRes),
     positiveValue: String = stringResource(id = R.string.ok),
     negativeValue: String = stringResource(id = R.string.cancel),
-    onPositive: (SignInSideEffect?) -> Unit = {},
-    onDismiss: (SignInSideEffect?) -> Unit = {},
+    onPositive: (SideEffect?) -> Unit = {},
+    onDismiss: (SideEffect?) -> Unit = {},
     onCompiled: () -> Unit = {},
 ): CustomAlertState {
     val state = rememberSaveable(isVisible, description, title, saver = CustomAlertState.Saver) {
@@ -131,8 +132,8 @@ fun rememberCustomAlertState(
 @Composable
 fun rememberCustomAlertState(
     state: CustomAlertState,
-    onPositive: (SignInSideEffect?) -> Unit = {},
-    onDismiss: (SignInSideEffect?) -> Unit = {},
+    onPositive: (SideEffect?) -> Unit = {},
+    onDismiss: (SideEffect?) -> Unit = {},
     onCompiled: () -> Unit = {},
 ): CustomAlertState {
     val positiveValue = state.positive.ifBlank { stringResource(id = R.string.ok) }
@@ -154,10 +155,10 @@ data class CustomAlertState(
     private val descriptionValue: String = "",
     private val positiveValue: String = "",
     private val negativeValue: String = "",
-    val positiveSideEffect: SignInSideEffect? = null,
-    val negativeSideEffect: SignInSideEffect? = null,
-    val onPositive: (SignInSideEffect?) -> Unit = {},
-    val onDismiss: (SignInSideEffect?) -> Unit = {},
+    val positiveSideEffect: SideEffect? = null,
+    val negativeSideEffect: SideEffect? = null,
+    val onPositive: (SideEffect?) -> Unit = {},
+    val onDismiss: (SideEffect?) -> Unit = {},
     val onCompiled: () -> Unit = {},
 ) {
     var isVisible by mutableStateOf(isVisibleValue)
@@ -173,10 +174,10 @@ data class CustomAlertState(
         descriptionValue: String = "",
         positiveValue: String = "",
         negativeValue: String = "",
-        positiveSideEffect: SignInSideEffect? = null,
-        negativeSideEffect: SignInSideEffect? = null,
-        onPositive: (SignInSideEffect?) -> Unit = {},
-        onDismiss: (SignInSideEffect?) -> Unit = {},
+        positiveSideEffect: SideEffect? = null,
+        negativeSideEffect: SideEffect? = null,
+        onPositive: (SideEffect?) -> Unit = {},
+        onDismiss: (SideEffect?) -> Unit = {},
         onCompiled: () -> Unit = {},
     ): CustomAlertState {
         return this.copy(
