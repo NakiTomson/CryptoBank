@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.presentation.navigation.nav_host.SetupRootNavHost
-import com.example.presentation.theme.RyzBankTheme
+import com.example.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RyzBankTheme {
+            AppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     SetupRootNavHost(navController = rememberNavController())
                 }

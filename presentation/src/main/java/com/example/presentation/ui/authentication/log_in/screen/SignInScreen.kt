@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +44,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -64,6 +66,7 @@ import com.example.presentation.core_compose.CircularProgressBar
 import com.example.presentation.core_compose.CustomAlert
 import com.example.presentation.core_compose.InternetConnectionLostScreen
 import com.example.presentation.core_compose.rememberCustomAlertState
+import com.example.presentation.theme.AppTheme
 import com.example.presentation.theme.Black100
 import com.example.presentation.theme.Black300
 import com.example.presentation.theme.White100
@@ -75,7 +78,9 @@ import presentation.R
 @Composable
 @Preview(showBackground = true, device = "id:pixel_6_pro")
 private fun SignInPreview() {
-    LogInScreen(modifier = Modifier.background(Black300))
+    AppTheme(darkTheme = true) {
+        LogInScreen(modifier = Modifier.background(MaterialTheme.colors.secondaryVariant))
+    }
 }
 
 @Composable
@@ -176,9 +181,10 @@ fun LogInScreen(
 ) {
     Box(modifier = modifier) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.background),
             modifier = Modifier
                 .size(100.dp)
                 .align(Alignment.TopCenter)
@@ -223,6 +229,8 @@ fun FormAuthorization(
         var password by remember { mutableStateOf(TextFieldValue("")) }
         var email by remember { mutableStateOf(TextFieldValue("")) }
 
+        val backgroundColor = MaterialTheme.colors.primary
+
         Text(
             text = stringResource(R.string.login),
             color = Color.White,
@@ -234,7 +242,7 @@ fun FormAuthorization(
                 .padding(bottom = 40.dp)
                 .drawWithCache {
                     onDrawBehind {
-                        drawPath(getDrawBackgroundPath(this@drawWithCache), color = Black100)
+                        drawPath(getDrawBackgroundPath(this@drawWithCache), color = backgroundColor)
                     }
                 },
         )
@@ -255,7 +263,7 @@ fun FormAuthorization(
                 unfocusedIndicatorColor = Black300,
                 containerColor = Color.Transparent,
                 errorIndicatorColor = Color.Red,
-                textColor = White100,
+                textColor = MaterialTheme.colors.background,
             ),
             maxLines = 1,
         )
@@ -298,7 +306,7 @@ fun FormAuthorization(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 45.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black300),
+            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
             onClick = {
                 onFireBaseAuthorizationClicked.invoke(email.text, password.text)
             }
@@ -325,7 +333,7 @@ fun FormAuthorization(
                 withStyle(style = SpanStyle(color = Black300, fontSize = 16.sp)) {
                     append(stringResource(R.string.not_have_account) + " ")
                 }
-                withStyle(style = SpanStyle(color = Color.White, fontSize = 16.sp)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colors.background, fontSize = 16.sp)) {
                     append(stringResource(R.string.create_now))
                 }
             },
@@ -355,8 +363,8 @@ private fun AuthorizationMethods(
             onClick = {
                 onGoogleAuthorizationClicked.invoke()
             },
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black100),
-            border = BorderStroke(2.dp, Black300)
+            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.onBackground),
+            border = BorderStroke(2.dp, MaterialTheme.colors.secondaryVariant)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_google),
@@ -379,8 +387,8 @@ private fun AuthorizationMethods(
             onClick = {
                 onFacebookAuthorizationClicked.invoke()
             },
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Black100),
-            border = BorderStroke(2.dp, Black300)
+            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.onBackground),
+            border = BorderStroke(2.dp, MaterialTheme.colors.secondaryVariant)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_facebook),

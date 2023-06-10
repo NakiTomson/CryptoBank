@@ -178,7 +178,7 @@ class SignInViewModel @Inject constructor(
         event?.let { postSideEffect(it) }
     }
 
-    private fun isValidEmail(email: String?): Boolean =
+     private fun isValidEmail(email: String?): Boolean =
         !(email.isNullOrBlank() || email.contains("@").not())
 
     private fun isValidPassword(password: String?): Boolean =
