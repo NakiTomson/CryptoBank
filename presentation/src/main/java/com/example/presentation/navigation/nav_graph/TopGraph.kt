@@ -7,6 +7,7 @@ import androidx.navigation.compose.navigation
 import com.example.presentation.navigation.navigateInclusive
 import com.example.presentation.navigation.sreens.AuthenticationScreens
 import com.example.presentation.navigation.sreens.TopScreens
+import com.example.presentation.ui.top.navigation.screen.NavigationRoute
 import com.example.presentation.ui.top.navigation.screen.NavigationScreen
 import com.example.presentation.ui.top.onboarding.screen.OnBoardingRoute
 import com.example.presentation.ui.top.splash.screen.SplashRoute
@@ -34,7 +35,7 @@ fun NavGraphBuilder.topNavGraph(
             }, supportNetworkErrorScreen = Unit)
         }
         composable(route = TopScreens.Navigation.route) {
-            NavigationScreen(navController)
+            NavigationRoute(navController)
         }
     }
 }

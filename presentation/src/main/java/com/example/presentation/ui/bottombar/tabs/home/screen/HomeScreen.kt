@@ -1,5 +1,6 @@
 package com.example.presentation.ui.bottombar.tabs.home.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.entity.UserEntity
+import com.example.presentation.theme.White200
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -47,10 +49,10 @@ fun HomeScreen(
     onHomeClicked: () -> Unit = {},
     user: () -> UserEntity? = { null }
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize().background(White200), contentAlignment = Alignment.Center) {
         Text(
             modifier = Modifier.clickable { onHomeClicked.invoke() },
-            text = user.invoke().toString(),
+            text = "Home Screen",
             color = Color.Red,
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.Bold

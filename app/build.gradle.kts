@@ -18,6 +18,7 @@ android {
     buildTypes {
         named("debug") {
 //            applicationIdSuffix = ".debug"
+            isDebuggable = true
         }
         named("release") {
             isMinifyEnabled = true
