@@ -3,7 +3,8 @@ package com.example.entity
 data class UserEntity(
     val id: String,
     val email: String,
-    val type: AuthorizationType
+    val type: AuthorizationType,
+    val cardEntity: List<CardEntity> = mutableListOf(CardEntity(), CardEntity(id = "2"))
 )
 
 

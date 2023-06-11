@@ -32,4 +32,6 @@ dependencies {
     implementation(Libraries.accompanistPager)
     implementation(Libraries.accompanistIndicators)
     implementation(Libraries.accompanistPermissions)
+    implementation(Libraries.accompanistPermissions)
+    implementation(Libraries.constraintCompose)
 }
