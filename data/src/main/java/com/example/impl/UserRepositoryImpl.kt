@@ -52,13 +52,25 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveUser(user: UserEntity): Unit {
-        userRoomStorage.saveUser(UserDb(user.id, user.email, user.type.type))
+    override suspend fun saveUser(user: UserEntity) {
+        userRoomStorage.saveUser(
+            UserDb(
+                user.id, user.email, user.type.type,
+                user.name ?: "Dmitry",
+                user.avatar ?: "https://i.ibb.co/vP5hj57/sample-icon.jpg"
+            )
+        )
     }
 
     override suspend fun getUser(): UserEntity? {
         val user = userRoomStorage.getUser() ?: return null
-        return UserEntity(user.id, user.email, getEnumValue(user.type))
+        return UserEntity(
+            user.id,
+            user.email,
+            getEnumValue(user.type),
+            user.name,
+            user.avatar,
+        )
     }
 
     override suspend fun clearUser() {

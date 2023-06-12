@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 interface OnBoardingService {
 
-    @GET("api/v2/onboarding")
+    @GET("https://645bcdcfa8f9e4d6e77393a3.mockapi.io/api/v2/onboarding")
     suspend fun getOnBoardingScreens(): NetworkResult<List<OnBoardingResponse>>
 }

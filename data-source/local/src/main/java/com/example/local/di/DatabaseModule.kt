@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.local.database.ApplicationDatabase
 import com.example.local.database.MIGRATION_1_2
+import com.example.local.database.MIGRATION_2_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,9 @@ internal object DatabaseModule {
     @Singleton
     fun provideDataBase(@ApplicationContext context: Context): ApplicationDatabase {
         return Room.databaseBuilder(context, ApplicationDatabase::class.java, "cryptoApp.db")
-            .addMigrations(MIGRATION_1_2).build()
+            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
+            .build()
     }
 
 }

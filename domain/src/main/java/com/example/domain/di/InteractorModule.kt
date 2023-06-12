@@ -1,7 +1,9 @@
 package com.example.domain.di
 
+import com.example.domain.api.CardInteractor
 import com.example.domain.api.OnBoardingInteractor
 import com.example.domain.api.UserInteractor
+import com.example.domain.impl.CardInteractorImpl
 import com.example.domain.impl.OnBoardingInteractorImpl
 import com.example.domain.impl.UserInteractorImpl
 import dagger.Binds
@@ -18,4 +20,7 @@ abstract class InteractorModule {
 
     @Binds
     abstract fun bindOnBoardingInteractor(userInteractor: OnBoardingInteractorImpl): OnBoardingInteractor
+
+    @Binds
+    abstract fun bindCardInteractor(cardInteractor: CardInteractorImpl): CardInteractor
 }

@@ -1,5 +1,6 @@
 package com.example.entity
 
+import core.R
 import java.util.Calendar
 
 data class CardEntity(
@@ -9,43 +10,75 @@ data class CardEntity(
     val balance: String = "1,230.21",
     val paymentType: PaymentCurrencyType = PaymentCurrencyType.USD,
     val paymentSystem: PaymentSystemType = PaymentSystemType.Visa,
-    val transactions: List<Transaction> = listOf(
-        Transaction(),
-        Transaction(id = "2"),
-        Transaction(id = "3"),
-        Transaction(id = "4"),
-        Transaction(id = "5"),
-        Transaction(id = "6"),
-        Transaction(id = "7"),
-        Transaction(id = "8"),
-        Transaction(id = "9"),
-        Transaction(id = "10"),
+    val transactions: List<TransactionEntity> = listOf(
+        TransactionEntity(),
+        TransactionEntity(id = "2"),
+        TransactionEntity(id = "3"),
+        TransactionEntity(id = "4"),
+        TransactionEntity(id = "5"),
+        TransactionEntity(id = "6"),
+        TransactionEntity(id = "7"),
+        TransactionEntity(id = "8"),
+        TransactionEntity(id = "9"),
+        TransactionEntity(id = "10"),
     )
 )
 
-enum class PaymentCurrencyType {
-    USD
+enum class PaymentCurrencyType(val currency: String) {
+    USD("$"),
+    EUR("€"),
+    Null("₽");
+
+    companion object {
+
+        fun getType(type: String): PaymentCurrencyType {
+            return PaymentCurrencyType.values().find { it.name.equals(type, ignoreCase = true) } ?: Null
+        }
+    }
 }
 
-enum class PaymentSystemType {
-    Visa
+enum class PaymentSystemType(val paySystem: Int) {
+    Visa(R.drawable.ic_pay_system_visa),
+    MASTERCARD(R.drawable.ic_pay_system_mastercard),
+    Null(R.drawable.ic_pay_system_mir);
+
+    companion object {
+        fun getType(type: String): PaymentSystemType {
+            return values().find { it.name.equals(type, true) } ?: Null
+        }
+    }
 }
 
-data class Transaction(
+data class TransactionEntity(
     val id: String = "1",
+    val cardId: String = "1",
     val name: String = "Paypal payment",
-    val icon: String = "https://i.ibb.co/XJpsH6p/pay-pal.png",
+    val media: String = "https://i.ibb.co/XJpsH6p/pay-pal.png",
     val data: Calendar = Calendar.getInstance(),
-    val amount: Double = 100.0,
-    val type: TransactionType = TransactionType.Outcome,
+    val amount: String = "216",
+    val type: TransactionType = TransactionType.Income,
     val category: CategoryTransactionType = CategoryTransactionType.Recent
 )
 
-enum class TransactionType {
+enum class TransactionType() {
     Income,
-    Outcome
+    Outcome,
+    Null;
+
+    companion object {
+        fun getType(type: String): TransactionType {
+            return values().find { it.name.equals(type, true) } ?: Null
+        }
+    }
 }
 
 enum class CategoryTransactionType {
-    Recent
+    Recent,
+    Null;
+
+    companion object {
+        fun getCategory(category: String): CategoryTransactionType {
+            return values().find { it.name.equals(category, true) } ?: Null
+        }
+    }
 }

@@ -16,8 +16,11 @@ val White = Color(0xFFFFFFFF)
 val White100 = Color(0xFFa7a7ab)
 val White200 = Color(0xFFDBE2E2)
 val White300 = Color(0xFFEFF1F3)
+val White400 = Color(0xFFfcfcfc)
 
 val Blue300 = Color(0xFFbfdbfe)
 val Blue600 = Color(0xFFf1f5f9)
 
 val Green100 = Color(0xFF47924B)
+
+val Red100 = Color(0xFFEB5757)

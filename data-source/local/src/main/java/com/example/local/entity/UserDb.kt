@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
 data class UserDb(
     @PrimaryKey val id: String,
     val email: String,
-    val type: String
+    val type: String,
+    val name: String,
+    val avatar: String,
 ) {
 
     companion object {
