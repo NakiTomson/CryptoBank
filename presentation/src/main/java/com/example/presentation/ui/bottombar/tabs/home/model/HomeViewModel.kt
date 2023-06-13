@@ -1,12 +1,14 @@
 package com.example.presentation.ui.bottombar.tabs.home.model
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.domain.api.CardInteractor
 import com.example.domain.api.UserInteractor
 import com.example.presentation.core.SideEffect
 import com.example.presentation.core.StatefulScreenModel
+import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
+import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
+import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.state.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,16 +16,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
     private val userInteractor: UserInteractor,
     private val cardInteractor: CardInteractor,
 ) : StatefulScreenModel<HomeState, SideEffect>(HomeState()) {
 
     init {
-        viewModelScope.launch {
-            val user = userInteractor.getUser() ?: throw NullPointerException()
-            val cards = cardInteractor.getUserCards(user.id)
-            reduceState { getState().copy(userValue = user, cardsValue = cards) }
+        viewModelScope {
+            loadUser()
         }
+    }
+
+    private suspend fun loadUser() {
+        val user = userInteractor.getUser() ?: throw NullPointerException()
+        reduceState { getState().copy(userValue = user, isUserLoadingValue = false) }
+        loadBankCards(user.id)
+    }
+
+    private suspend fun loadBankCards(userId: String) {
+        val cards = cardInteractor.getUserCards(userId)
+        val cardItem = cards.map { card ->
+            card to card.transactions
+                .groupBy { it.category }
+                .flatMap { map ->
+                    listOf(BankTransactionCategory(map.key), *map.value.map { BankTransaction(it) }.toTypedArray())
+                }
+        }.map {
+            BankCard(it.first, it.second)
+        }
+        reduceState { getState().copy(cardsValue = cardItem, isBankCardsLoadingValue = false) }
     }
 }

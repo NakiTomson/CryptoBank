@@ -16,7 +16,7 @@ data class CardDb(
     val balance: String,
     val paymentType: String,
     val paymentSystem: String,
-    @ColumnInfo(name = "transactions") val transactions: ArrayList<TransactionDB>
+    @ColumnInfo(name = "transactions") val transactions: List<TransactionDB>
 ) {
     companion object {
         const val TABLE_NAME = "card"
@@ -37,37 +37,3 @@ data class TransactionDB(
     }
 }
 
-
-//abstract class Converters<T> {
-//
-//    @TypeConverter
-//    fun mapListToString(value: List<T>): String {
-//        val gson = Gson()
-//        val type = object : TypeToken<List<T>>() {}.type
-//        return gson.toJson(value, type)
-//    }
-//
-//    @TypeConverter
-//    fun mapStringToList(value: String): List<T> {
-//        val gson = Gson()
-//        val type = object : TypeToken<List<T>>() {}.type
-//        return gson.fromJson(value, type)
-//    }
-//}
-
-// create
-class TransactionConverter {
-    @TypeConverter
-    fun mapListToString(value: ArrayList<TransactionDB>): String {
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<TransactionDB>>() {}.type
-        return gson.toJson(value, type)
-    }
-
-    @TypeConverter
-    fun mapStringToList(value: String): ArrayList<TransactionDB> {
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<TransactionDB>>() {}.type
-        return gson.fromJson(value, type)
-    }
-}

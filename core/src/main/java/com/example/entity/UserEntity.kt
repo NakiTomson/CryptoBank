@@ -11,7 +11,8 @@ data class UserEntity(
 enum class AuthorizationType(val type: String) {
     FireBase("FireBase"),
     Google("Google"),
-    Facebook("Facebook");
+    Facebook("Facebook"),
+    Null("Null");
 
     companion object {
         fun getEnumValue(name: String): AuthorizationType {

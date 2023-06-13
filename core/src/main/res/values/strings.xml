@@ -2,5 +2,7 @@
 <resources>
 
 
+    <string name="recent_transaction">Recent Transactions</string>
+    <string name="undefined">Undefined</string>
 
 </resources>

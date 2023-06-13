@@ -17,5 +17,4 @@ class CardInteractorImpl @Inject constructor(
             cardRepository.getUserCards(userId)
         }
     }
-
 }

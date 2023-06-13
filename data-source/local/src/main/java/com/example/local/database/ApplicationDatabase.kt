@@ -3,12 +3,12 @@ package com.example.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.local.converters.TransactionConverter
 import com.example.local.dao.CardDao
 import com.example.local.dao.OnBoardingDao
 import com.example.local.dao.UserDao
 import com.example.local.entity.CardDb
 import com.example.local.entity.OnBoardingDb
-import com.example.local.entity.TransactionConverter
 import com.example.local.entity.UserDb
 
 

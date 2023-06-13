@@ -1,5 +1,7 @@
 package com.example.entity
 
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import core.R
 import java.util.Calendar
 
@@ -72,9 +74,9 @@ enum class TransactionType() {
     }
 }
 
-enum class CategoryTransactionType {
-    Recent,
-    Null;
+enum class CategoryTransactionType(@StringRes val category: Int) {
+    Recent(R.string.recent_transaction),
+    Null(R.string.undefined);
 
     companion object {
         fun getCategory(category: String): CategoryTransactionType {
