@@ -47,14 +47,14 @@ fun CardOptions(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
             Button(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
-                    .size(65.dp)
+                    .size(60.dp)
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
@@ -64,7 +64,7 @@ fun CardOptions(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(36.dp),
+                        .size(30.dp),
                 )
             }
             Text(
@@ -79,9 +79,9 @@ fun CardOptions(
         }
         Column {
             Button(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
-                    .size(65.dp)
+                    .size(60.dp)
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
@@ -91,7 +91,7 @@ fun CardOptions(
                     painter = painterResource(R.drawable.ic_request),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(36.dp),
+                        .size(30.dp),
                 )
             }
             Text(
@@ -106,9 +106,9 @@ fun CardOptions(
         }
         Column {
             Button(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
-                    .size(65.dp)
+                    .size(60.dp)
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
@@ -118,7 +118,7 @@ fun CardOptions(
                     painter = painterResource(R.drawable.ic_pay),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(36.dp),
+                        .size(30.dp),
                 )
             }
             Text(
@@ -134,9 +134,9 @@ fun CardOptions(
 
         Column() {
             Button(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(15.dp),
                 modifier = Modifier
-                    .size(65.dp)
+                    .size(60.dp)
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
@@ -146,7 +146,7 @@ fun CardOptions(
                     painter = painterResource(R.drawable.ic_more),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(36.dp),
+                        .size(30.dp),
                 )
             }
             Text(

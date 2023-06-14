@@ -71,8 +71,8 @@ internal fun TransactionItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.size(72.dp),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.size(65.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
                 onClick = { })
@@ -87,7 +87,7 @@ internal fun TransactionItem(
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .size(48.dp),
+                        .size(40.dp),
                 )
             }
             Column(

@@ -133,7 +133,7 @@ internal fun HomeScreen(
         val cardOptionsModifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(top = 20.dp, bottom = 10.dp)
+            .padding(top = 20.dp, bottom = 10.dp, start = 16.dp, end = 16.dp)
 
         val transactionModifier = Modifier
             .padding(top = 10.dp, start = 16.dp, end = 16.dp)

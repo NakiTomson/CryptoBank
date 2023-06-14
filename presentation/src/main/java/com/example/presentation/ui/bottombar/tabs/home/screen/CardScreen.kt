@@ -98,7 +98,7 @@ internal fun CardsScreen(
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(user.invoke()?.avatar)
+                .data(user.invoke().avatar)
                 .crossfade(true)
                 .placeholder(R.drawable.sample_icon)
                 .diskCachePolicy(CachePolicy.ENABLED)

@@ -24,7 +24,7 @@ internal fun BankCardPage(modifier: Modifier, card: CardEntity) {
     Box(modifier = modifier) {
         Image(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .fillMaxWidth()
                 .align(Alignment.CenterStart),
             painter = painterResource(R.drawable.ic_desing_card),
@@ -35,21 +35,36 @@ internal fun BankCardPage(modifier: Modifier, card: CardEntity) {
             modifier = Modifier
                 .matchParentSize()
                 .align(Alignment.CenterStart)
-                .padding(24.dp),
+                .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
         )
         {
             Image(
                 modifier = Modifier
+                    .padding(start = 16.dp)
                     .size(40.dp),
                 painter = painterResource(card.paymentSystem.paySystem),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
-            Text("${card.paymentType.currency}${card.balance}", fontSize = 27.sp, fontWeight = FontWeight.Bold)
-            Text(card.number, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-            Text(card.holderName, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Text(
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 30.dp),
+                text = "${card.paymentType.currency} ${card.balance}",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 14.dp),
+                text = card.number, fontSize = 16.sp, fontWeight = FontWeight.Medium
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 14.dp),
+                text = card.holderName, fontSize = 16.sp, fontWeight = FontWeight.Medium
+            )
         }
     }
 }
