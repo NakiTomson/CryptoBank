@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberSwipeableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -93,7 +96,7 @@ fun HomeRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreen(
     user: () -> UserEntity,
@@ -162,7 +165,7 @@ internal fun HomeScreen(
             items(bankCard.transactions, key = { it.id }) {
                 when (it) {
                     is BankTransactionCategory ->
-                        TitleTypeTransactionItem(transactionModifier, it.category)
+                        CategoryTransactionItem(transactionModifier, it.category)
 
                     is BankTransaction ->
                         TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType, onTransactionClicked)

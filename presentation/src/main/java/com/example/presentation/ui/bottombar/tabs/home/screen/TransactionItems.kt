@@ -43,10 +43,10 @@ import presentation.R
 
 
 @Composable
-internal fun TitleTypeTransactionItem(modifier: Modifier = Modifier, type: CategoryTransactionType) {
+internal fun CategoryTransactionItem(modifier: Modifier = Modifier, category: CategoryTransactionType) {
     Box(modifier) {
         Text(
-            text = stringResource(id = type.category),
+            text = stringResource(id = category.category),
             textAlign = TextAlign.Start,
             maxLines = 1,
             fontSize = 18.sp,
