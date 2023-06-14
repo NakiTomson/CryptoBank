@@ -1,5 +1,6 @@
 package com.example.remote.response
 
+import com.example.core.getMockCalendarData
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
 import com.example.entity.PaymentCurrencyType
@@ -26,7 +27,7 @@ fun CardResponse.toEntity(transaction: List<TransactionResponse>): CardEntity {
         balance,
         PaymentCurrencyType.getType(paymentType),
         PaymentSystemType.getType(paymentSystem),
-        transaction.toEntity().shuffled(),
+        transaction.toEntity(),
     )
 }
 
@@ -38,7 +39,7 @@ fun TransactionResponse.toEntity(): TransactionEntity {
         cardId,
         name,
         media,
-        Calendar.getInstance(),
+        getMockCalendarData(),
         amount,
         TransactionType.getType(type),
         CategoryTransactionType.getCategory(category)

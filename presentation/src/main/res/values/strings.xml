@@ -27,4 +27,8 @@
     <string name="empty"></string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="request">Request</string>
+    <string name="pay">Pay</string>
+    <string name="more">More</string>
 </resources>

@@ -4,5 +4,6 @@
 
     <string name="recent_transaction">Recent Transactions</string>
     <string name="undefined">Undefined</string>
+    <string name="others">Others</string>
 
 </resources>

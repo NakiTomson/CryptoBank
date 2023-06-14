@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,8 +36,15 @@ fun CardOptionsPreview(modifier: Modifier = Modifier) {
         .padding(top = 20.dp, bottom = 10.dp)
     CardOptions(cardOptionsModifier)
 }
+
 @Composable
-fun CardOptions(modifier: Modifier = Modifier) {
+fun CardOptions(
+    modifier: Modifier = Modifier,
+    sendCardClicked: () -> Unit = {},
+    requestCardClicked: () -> Unit = {},
+    payCardClicked: () -> Unit = {},
+    moreOptionsClicked: () -> Unit = {},
+) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround,
@@ -50,7 +58,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
-                onClick = { })
+                onClick = { sendCardClicked.invoke() })
             {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
@@ -63,7 +71,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally),
-                text = "Send",
+                text = stringResource(id = R.string.send),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
@@ -77,7 +85,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
-                onClick = { })
+                onClick = { requestCardClicked.invoke() })
             {
                 Image(
                     painter = painterResource(R.drawable.ic_request),
@@ -90,7 +98,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally),
-                text = "Request",
+                text = stringResource(id = R.string.request),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
@@ -104,7 +112,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
-                onClick = { })
+                onClick = { payCardClicked.invoke() })
             {
                 Image(
                     painter = painterResource(R.drawable.ic_pay),
@@ -117,7 +125,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally),
-                text = "Pay",
+                text = stringResource(id = R.string.pay),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
@@ -132,7 +140,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                     .clickable { },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White300),
                 contentPadding = PaddingValues(),
-                onClick = { })
+                onClick = { moreOptionsClicked.invoke() })
             {
                 Image(
                     painter = painterResource(R.drawable.ic_more),
@@ -145,7 +153,7 @@ fun CardOptions(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally),
-                text = "More",
+                text = stringResource(id = R.string.more),
                 color = Color.Black,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium

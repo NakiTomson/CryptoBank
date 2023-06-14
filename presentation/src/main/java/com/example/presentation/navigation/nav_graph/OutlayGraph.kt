@@ -4,12 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.presentation.navigation.navigateSingleTop
 import com.example.presentation.navigation.sreens.BottomNavigationScreens
-import com.example.presentation.navigation.sreens.HomeScreens
 import com.example.presentation.navigation.sreens.OutlayScreens
-import com.example.presentation.ui.bottombar.tabs.goal.screen.GoalScreen
-import com.example.presentation.ui.bottombar.tabs.home.screen.HomeRoute
 import com.example.presentation.ui.bottombar.tabs.outlay.screen.OutlayScreen
 import com.example.presentation.ui.sreens.detail.screen.DetailScreen
 

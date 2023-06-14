@@ -17,12 +17,15 @@ class CardRepositoryImpl @Inject constructor(
     override suspend fun getUserCards(userId: String): List<CardEntity> {
         val result = local.getCards().run {
             if (this.isNullOrEmpty()) {
-                val result = remote.getCards(userId).map {
-                    it to remote.getTransactions(it.id)
-                }.map {
-                    it.first.toEntity(it.second)
-                }
-                local.saveCards(result.getDb())
+                val cards = remote.getCards(userId)
+                val transactions = remote.getTransactions(userId)
+                val result = cards
+                    .map { card ->
+                        card to (transactions.filter { it.cardId == card.id })
+                    }.map {
+                        it.first.toEntity(it.second)
+                    }.getDb()
+                local.saveCards(result)
             }
             local.getCards()
         } ?: listOf()

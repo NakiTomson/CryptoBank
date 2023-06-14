@@ -1,5 +1,6 @@
 package com.example.mapper
 
+import com.example.core.getMockCalendarData
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
 import com.example.entity.PaymentCurrencyType
@@ -22,7 +23,7 @@ fun CardDb.getEntity(): CardEntity {
         balance,
         PaymentCurrencyType.getType(paymentType),
         PaymentSystemType.getType(paymentSystem),
-        transactions.toEntity()
+        transactions.toEntity().sortedByDescending { it.data  }.sortedBy { it.category }
     )
 }
 
@@ -36,7 +37,7 @@ fun TransactionDB.getEntity(): TransactionEntity {
         cardId,
         name,
         media,
-        Calendar.getInstance(),
+        getMockCalendarData(),
         amount,
         TransactionType.getType(type),
         CategoryTransactionType.getCategory(category)

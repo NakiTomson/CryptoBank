@@ -57,11 +57,14 @@ internal fun TitleTypeTransactionItem(modifier: Modifier = Modifier, type: Categ
 
 @Composable
 internal fun TransactionItem(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier,
     transaction: TransactionEntity,
-    paymentType: PaymentCurrencyType
+    paymentType: PaymentCurrencyType,
+    onTransactionClicked: () -> Unit = {},
 ) {
-    Box(modifier.clickable { }) {
+    Box(modifier.clickable {
+        onTransactionClicked.invoke()
+    }) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,

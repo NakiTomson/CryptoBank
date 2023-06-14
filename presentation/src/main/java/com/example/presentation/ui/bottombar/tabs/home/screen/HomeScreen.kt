@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import com.example.entity.AuthorizationType
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
 import com.example.entity.UserEntity
+import com.example.presentation.core.EmptySideEffect
 import com.example.presentation.core_compose.CircularProgressBar
 import com.example.presentation.theme.Black300
 import com.example.presentation.theme.White100
@@ -50,9 +52,17 @@ private fun HomeScreenPreview() {
 
 @Composable
 fun HomeRoute(
-    onHomeClicked: () -> Unit = {},
+    onDetailCardClicked: () -> Unit = {},
+    onAddNewCardClicked: () -> Unit = {},
+    openProfileClicked: () -> Unit = {},
+    sendCardClicked: () -> Unit = {},
+    requestCardClicked: () -> Unit = {},
+    payCardClicked: () -> Unit = {},
+    moreOptionsClicked: () -> Unit = {},
+    onTransactionClicked: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val events = viewModel.sideEffectFlow.collectAsStateWithLifecycle(EmptySideEffect)
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
     val userState = state.value.user.collectAsStateWithLifecycle()
     val cardsState = state.value.cards.collectAsStateWithLifecycle()
@@ -60,12 +70,26 @@ fun HomeRoute(
     val isBankCardsLoading = state.value.isBankCardsLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel, block = {
+        snapshotFlow { events.value }
+            .collect {
+                when (it) {
 
+                }
+            }
     })
+
     HomeScreen(
         { userState.value },
         { cardsState.value },
-        { isBankCardsLoading.value }
+        { isBankCardsLoading.value },
+        onDetailCardClicked,
+        onAddNewCardClicked,
+        openProfileClicked,
+        sendCardClicked,
+        requestCardClicked,
+        payCardClicked,
+        moreOptionsClicked,
+        onTransactionClicked
     )
 }
 
@@ -75,6 +99,14 @@ internal fun HomeScreen(
     user: () -> UserEntity,
     cards: () -> List<BankCard>,
     isBackCardLoading: () -> Boolean = { false },
+    onDetailCardClicked: () -> Unit = {},
+    onAddNewCardClicked: () -> Unit = {},
+    openProfileClicked: () -> Unit = {},
+    sendCardClicked: () -> Unit = {},
+    requestCardClicked: () -> Unit = {},
+    payCardClicked: () -> Unit = {},
+    moreOptionsClicked: () -> Unit = {},
+    onTransactionClicked: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -108,10 +140,24 @@ internal fun HomeScreen(
 
         LazyColumn(modifier = Modifier.fillMaxSize(), rememberLazyListState()) {
             item {
-                CardsScreen(cardsModifier, pagerState, user, cards)
+                CardsScreen(
+                    cardsModifier,
+                    pagerState,
+                    user,
+                    cards,
+                    onDetailCardClicked,
+                    onAddNewCardClicked,
+                    openProfileClicked
+                )
             }
             stickyHeader {
-                CardOptions(cardOptionsModifier)
+                CardOptions(
+                    cardOptionsModifier,
+                    sendCardClicked,
+                    requestCardClicked,
+                    payCardClicked,
+                    moreOptionsClicked
+                )
             }
             items(bankCard.transactions, key = { it.id }) {
                 when (it) {
@@ -119,11 +165,10 @@ internal fun HomeScreen(
                         TitleTypeTransactionItem(transactionModifier, it.category)
 
                     is BankTransaction ->
-                        TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType)
+                        TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType, onTransactionClicked)
                 }
             }
         }
-
     }
 }
 

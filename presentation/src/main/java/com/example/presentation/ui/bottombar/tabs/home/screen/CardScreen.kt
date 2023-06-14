@@ -78,6 +78,9 @@ internal fun CardsScreen(
     pagerState: PagerState,
     user: () -> UserEntity,
     cards: () -> List<BankCard>,
+    openProfileClicked: () -> Unit = {},
+    onDetailCardClicked: () -> Unit = {},
+    onAddNewCardClicked: () -> Unit = {},
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -110,6 +113,9 @@ internal fun CardsScreen(
                     end.linkTo(parent.end)
                 }
                 .size(40.dp)
+                .clickable {
+                    openProfileClicked.invoke()
+                }
                 .clip(CircleShape)
         )
 
@@ -146,6 +152,8 @@ internal fun CardsScreen(
                     start.linkTo(parent.start)
                     end.linkTo(addCard.start)
                     width = Dimension.fillToConstraints
+                }.clickable {
+                    onAddNewCardClicked.invoke()
                 },
             state = pagerState,
             userScrollEnabled = true
@@ -163,7 +171,9 @@ internal fun CardsScreen(
                     width = Dimension.value(50.dp)
                 },
             shape = RoundedCornerShape(20.dp),
-            onClick = {}
+            onClick = {
+                onDetailCardClicked.invoke()
+            }
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_add),

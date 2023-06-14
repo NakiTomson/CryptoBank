@@ -2,6 +2,7 @@ package com.example.entity
 
 import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
+import com.example.core.getMockCalendarData
 import core.R
 import java.util.Calendar
 
@@ -56,7 +57,7 @@ data class TransactionEntity(
     val cardId: String = "1",
     val name: String = "Paypal payment",
     val media: String = "https://i.ibb.co/XJpsH6p/pay-pal.png",
-    val data: Calendar = Calendar.getInstance(),
+    val data: Calendar = getMockCalendarData(),
     val amount: String = "216",
     val type: TransactionType = TransactionType.Income,
     val category: CategoryTransactionType = CategoryTransactionType.Recent
@@ -76,11 +77,11 @@ enum class TransactionType() {
 
 enum class CategoryTransactionType(@StringRes val category: Int) {
     Recent(R.string.recent_transaction),
-    Null(R.string.undefined);
+    Others(R.string.others);
 
     companion object {
         fun getCategory(category: String): CategoryTransactionType {
-            return values().find { it.name.equals(category, true) } ?: Null
+            return values().find { it.name.equals(category, true) } ?: Others
         }
     }
 }

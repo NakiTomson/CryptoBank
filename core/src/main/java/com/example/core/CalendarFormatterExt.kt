@@ -74,3 +74,10 @@ fun Calendar.getCalendarFormatToUTC(): Calendar {
     calendar.timeInMillis = formatter.parse(time).time
     return calendar
 }
+
+fun getMockCalendarData(): Calendar {
+    val data = Calendar.getInstance()
+    data.add(Calendar.DAY_OF_MONTH, -(0..10).random())
+    data.add(Calendar.HOUR, -(0..24).random())
+    return data
+}
