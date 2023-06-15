@@ -1,10 +1,12 @@
 package com.example.local.entity
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
 
@@ -16,6 +18,7 @@ data class CardDb(
     val balance: String,
     val paymentType: String,
     val paymentSystem: String,
+    @Embedded val designCard: DesignCardDb,
     @ColumnInfo(name = "transactions") val transactions: List<TransactionDB>
 ) {
     companion object {
@@ -36,4 +39,10 @@ data class TransactionDB(
         const val TABLE_NAME = "card"
     }
 }
+
+class DesignCardDb(
+    val background: String,
+    val textColor: String,
+    val paySystemLogo: String
+)
 

@@ -138,7 +138,7 @@ internal fun CardsScreen(
                     start.linkTo(welcome.start)
                 }
                 .clickable { },
-            text = user.invoke()?.name.toString(),
+            text = user.invoke().name.toString(),
             color = Color.Black,
             fontSize = 21.sp,
             fontWeight = FontWeight.Bold

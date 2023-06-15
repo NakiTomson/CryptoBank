@@ -3,12 +3,15 @@ package com.example.mapper
 import com.example.core.getMockCalendarData
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
+import com.example.entity.DesignCardEntity
 import com.example.entity.PaymentCurrencyType
 import com.example.entity.PaymentSystemType
 import com.example.entity.TransactionEntity
 import com.example.entity.TransactionType
 import com.example.local.entity.CardDb
+import com.example.local.entity.DesignCardDb
 import com.example.local.entity.TransactionDB
+import com.example.remote.response.DesignCardResponse
 import java.util.Calendar
 
 fun List<CardDb>.getEntity(): List<CardEntity> {
@@ -23,8 +26,13 @@ fun CardDb.getEntity(): CardEntity {
         balance,
         PaymentCurrencyType.getType(paymentType),
         PaymentSystemType.getType(paymentSystem),
-        transactions.toEntity().sortedByDescending { it.data  }.sortedBy { it.category }
+        designCard.toEntity(),
+        transactions.toEntity().sortedByDescending { it.data }.sortedBy { it.category }
     )
+}
+
+fun DesignCardDb.toEntity(): DesignCardEntity {
+    return DesignCardEntity(background, textColor, paySystemLogo)
 }
 
 fun List<TransactionDB>.toEntity(): List<TransactionEntity> {
@@ -50,7 +58,20 @@ fun List<CardEntity>.getDb(): List<CardDb> {
 }
 
 fun CardEntity.toDb(): CardDb {
-    return CardDb(id, holderName, number, balance, paymentType.name, paymentSystem.name, transactions.toDb())
+    return CardDb(
+        id,
+        holderName,
+        number,
+        balance,
+        paymentType.name,
+        paymentSystem.name,
+        designCard.toDb(),
+        transactions.toDb()
+    )
+}
+
+fun DesignCardEntity.toDb(): DesignCardDb {
+    return DesignCardDb(background, textColor, paySystemLogo)
 }
 
 fun List<TransactionEntity>.toDb(): ArrayList<TransactionDB> {

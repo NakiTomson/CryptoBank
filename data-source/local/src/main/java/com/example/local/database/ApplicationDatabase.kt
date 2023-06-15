@@ -14,7 +14,7 @@ import com.example.local.entity.UserDb
 
 @Database(
     entities = [OnBoardingDb::class, UserDb::class, CardDb::class],
-    version = 4,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(TransactionConverter::class)

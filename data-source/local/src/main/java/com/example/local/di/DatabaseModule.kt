@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.example.local.database.ApplicationDatabase
 import com.example.local.database.MIGRATION_1_2
 import com.example.local.database.MIGRATION_2_3
+import com.example.local.database.MIGRATION_4_5
+import com.example.local.database.MIGRATION_5_6
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +24,8 @@ internal object DatabaseModule {
         return Room.databaseBuilder(context, ApplicationDatabase::class.java, "cryptoApp.db")
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_4_5)
+            .addMigrations(MIGRATION_5_6)
             .build()
     }
 

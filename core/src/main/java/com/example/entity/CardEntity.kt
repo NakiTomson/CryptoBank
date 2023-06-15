@@ -1,6 +1,5 @@
 package com.example.entity
 
-import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import com.example.core.getMockCalendarData
 import core.R
@@ -13,6 +12,8 @@ data class CardEntity(
     val balance: String = "1,230.21",
     val paymentType: PaymentCurrencyType = PaymentCurrencyType.USD,
     val paymentSystem: PaymentSystemType = PaymentSystemType.Visa,
+    val designCard: DesignCardEntity =
+        DesignCardEntity("", "#f9f9f8", ""),
     val transactions: List<TransactionEntity> = listOf(
         TransactionEntity(),
         TransactionEntity(id = "2"),
@@ -24,7 +25,13 @@ data class CardEntity(
         TransactionEntity(id = "8"),
         TransactionEntity(id = "9"),
         TransactionEntity(id = "10"),
-    )
+    ),
+)
+
+class DesignCardEntity(
+    val background: String,
+    val textColor: String,
+    val paySystemLogo: String
 )
 
 enum class PaymentCurrencyType(val currency: String) {
