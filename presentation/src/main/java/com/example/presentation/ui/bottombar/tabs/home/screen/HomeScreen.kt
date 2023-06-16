@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,9 +38,7 @@ import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.filter
 
 
 @Composable
@@ -96,7 +97,7 @@ fun HomeRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreen(
     user: () -> UserEntity,
@@ -123,7 +124,7 @@ internal fun HomeScreen(
             colorProgress = White100,
             colorIndicator = Black300
         )
-        val pagerState: PagerState = rememberPagerState()
+        val pagerState: PagerState = rememberPagerState(0)
 
         val cardsModifier = Modifier
             .background(Color.White)
@@ -153,24 +154,24 @@ internal fun HomeScreen(
                     openProfileClicked
                 )
             }
-            stickyHeader {
-                CardOptions(
-                    cardOptionsModifier,
-                    sendCardClicked,
-                    requestCardClicked,
-                    payCardClicked,
-                    moreOptionsClicked
-                )
-            }
-            items(bankCard.transactions, key = { it.id }) {
-                when (it) {
-                    is BankTransactionCategory ->
-                        CategoryTransactionItem(transactionModifier, it.category)
-
-                    is BankTransaction ->
-                        TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType, onTransactionClicked)
-                }
-            }
+//            stickyHeader {
+//                CardOptions(
+//                    cardOptionsModifier,
+//                    sendCardClicked,
+//                    requestCardClicked,
+//                    payCardClicked,
+//                    moreOptionsClicked
+//                )
+//            }
+//            items(bankCard.transactions, key = { it.id }) {
+//                when (it) {
+//                    is BankTransactionCategory ->
+//                        CategoryTransactionItem(transactionModifier, it.category)
+//
+//                    is BankTransaction ->
+//                        TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType, onTransactionClicked)
+//                }
+//            }
         }
     }
 }

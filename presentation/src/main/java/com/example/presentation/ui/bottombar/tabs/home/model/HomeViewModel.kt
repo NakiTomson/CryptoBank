@@ -2,6 +2,7 @@ package com.example.presentation.ui.bottombar.tabs.home.model
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.core.Dispatchers
 import com.example.domain.api.CardInteractor
 import com.example.domain.api.UserInteractor
 import com.example.presentation.core.SideEffect
@@ -12,6 +13,7 @@ import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTrans
 import com.example.presentation.ui.bottombar.tabs.home.state.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +21,7 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val userInteractor: UserInteractor,
     private val cardInteractor: CardInteractor,
+    private val dispatchers: Dispatchers,
 ) : StatefulScreenModel<HomeState, SideEffect>(HomeState()) {
 
     init {
@@ -34,15 +37,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun loadBankCards(userId: String) {
-        val cards = cardInteractor.getUserCards(userId)
-        val cardItem = cards.map { card ->
-            card to card.transactions
-                .groupBy { it.category }
-                .flatMap { map ->
-                    listOf(BankTransactionCategory(map.key), *map.value.map { BankTransaction(it) }.toTypedArray())
-                }
-        }.map {
-            BankCard(it.first, it.second)
+        val cardItem = withContext(dispatchers.io) {
+            val cards = cardInteractor.getUserCards(userId)
+            cards.map { card ->
+                card to card.transactions
+                    .groupBy { it.category }
+                    .flatMap { map ->
+                        listOf(BankTransactionCategory(map.key), *map.value.map { BankTransaction(it) }.toTypedArray())
+                    }
+            }.map {
+                BankCard(it.first, it.second)
+            }
         }
         reduceState { getState().copy(cardsValue = cardItem, isBankCardsLoadingValue = false) }
     }

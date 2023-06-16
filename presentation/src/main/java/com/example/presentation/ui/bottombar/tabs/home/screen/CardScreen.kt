@@ -1,5 +1,6 @@
 package com.example.presentation.ui.bottombar.tabs.home.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -41,13 +48,10 @@ import com.example.presentation.theme.Green100
 import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import com.example.presentation.ui.top.onboarding.ViewPagerSlider
 import presentation.R
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true)
 @Composable
 private fun CardsScreenPreview() {
@@ -71,7 +75,7 @@ private fun CardsScreenPreview() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CardsScreen(
     modifier: Modifier,
@@ -94,7 +98,7 @@ internal fun CardsScreen(
         ) = createRefs()
 
         val brush = Brush.verticalGradient(colors = listOf(Black300, Black))
-        val pageModifier = Modifier.fillMaxSize()
+        val pageModifier = Modifier.fillMaxWidth()
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -144,22 +148,37 @@ internal fun CardsScreen(
             fontWeight = FontWeight.Bold
         )
 
-        HorizontalPager(
-            count = cards.invoke().size,
-            modifier = Modifier
-                .constrainAs(pager) {
-                    top.linkTo(name.bottom, 30.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(addCard.start)
-                    width = Dimension.fillToConstraints
-                }.clickable {
-                    onAddNewCardClicked.invoke()
-                },
-            state = pagerState,
-            userScrollEnabled = true
-        ) {
-            BankCardPage(pageModifier, cards.invoke()[pagerState.currentPage].card)
-        }
+        val pagerModifier = Modifier
+            .fillMaxSize()
+            .constrainAs(pager) {
+                top.linkTo(name.bottom, 30.dp)
+                start.linkTo(parent.start)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(addCard.start)
+                width = Dimension.fillToConstraints
+            }
+
+        ViewPagerSlider(pagerModifier, pageModifier, cards.invoke())
+
+//        HorizontalPager(
+//            pageCount = cards.invoke().size,
+//            modifier = Modifier
+//                .constrainAs(pager) {
+//
+//                    top.linkTo(name.bottom, 30.dp)
+//                    start.linkTo(parent.start)
+//                    end.linkTo(addCard.start)
+//                    width = Dimension.fillToConstraints
+//                }
+//                .clickable {
+//                    onAddNewCardClicked.invoke()
+//                },
+//            state = pagerState,
+//            userScrollEnabled = true,
+//            beyondBoundsPageCount = 3
+//        ) {
+//            BankCardPage(pageModifier, cards.invoke()[pagerState.currentPage].card)
+//        }
 
         GradientButton(
             gradient = brush,
