@@ -197,8 +197,8 @@ fun OnBoardingScreenPager(
 ) {
     HorizontalPager(
         onBoardings.size, state = state, modifier = modifier.fillMaxSize(), userScrollEnabled = false
-    ) {
-        OnBoardingPage(onBoardings[state.currentPage])
+    ) {page->
+        OnBoardingPage(onBoardings[page])
     }
 }
 

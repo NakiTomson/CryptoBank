@@ -1,8 +1,10 @@
 package com.example.presentation.ui.bottombar.tabs.home.screen
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,15 +14,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,7 +39,7 @@ import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -124,6 +125,7 @@ internal fun HomeScreen(
             colorProgress = White100,
             colorIndicator = Black300
         )
+
         val pagerState: PagerState = rememberPagerState(0)
 
         val cardsModifier = Modifier
@@ -140,10 +142,9 @@ internal fun HomeScreen(
             .padding(top = 10.dp, start = 16.dp, end = 16.dp)
 
         val bankCards = cards().ifEmpty { return }
-        val bankCard = bankCards[pagerState.currentPage]
-
+        val bankCard = bankCards[pagerState.settledPage]
         LazyColumn(modifier = Modifier.fillMaxSize(), rememberLazyListState()) {
-            item {
+            item(key = 0) {
                 CardsScreen(
                     cardsModifier,
                     pagerState,
@@ -154,24 +155,33 @@ internal fun HomeScreen(
                     openProfileClicked
                 )
             }
-//            stickyHeader {
-//                CardOptions(
-//                    cardOptionsModifier,
-//                    sendCardClicked,
-//                    requestCardClicked,
-//                    payCardClicked,
-//                    moreOptionsClicked
-//                )
-//            }
-//            items(bankCard.transactions, key = { it.id }) {
-//                when (it) {
-//                    is BankTransactionCategory ->
-//                        CategoryTransactionItem(transactionModifier, it.category)
-//
-//                    is BankTransaction ->
-//                        TransactionItem(transactionModifier, it.entity, bankCard.card.paymentType, onTransactionClicked)
-//                }
-//            }
+            stickyHeader {
+                CardOptions(
+                    cardOptionsModifier,
+                    sendCardClicked,
+                    requestCardClicked,
+                    payCardClicked,
+                    moreOptionsClicked
+                )
+            }
+
+            items(bankCard.transactions, key = { it.id }) {
+                Row(Modifier.animateItemPlacement()) {
+                    when (it) {
+                        is BankTransactionCategory ->
+                            CategoryTransactionItem(transactionModifier, it.category)
+
+                        is BankTransaction ->
+                            TransactionItem(
+                                transactionModifier,
+                                it.entity,
+                                bankCard.card.paymentType,
+                                onTransactionClicked
+                            )
+
+                    }
+                }
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 package com.example.presentation.ui.bottombar.tabs.home.screen
 
+import android.util.Log
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,8 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +20,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
@@ -48,7 +53,7 @@ import com.example.presentation.theme.Green100
 import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
-import com.example.presentation.ui.top.onboarding.ViewPagerSlider
+import kotlinx.coroutines.launch
 import presentation.R
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -97,8 +102,16 @@ internal fun CardsScreen(
             addCard,
         ) = createRefs()
 
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(Unit) {
+            scope.launch {
+                pagerState.animateScrollToPage(page = pagerState.settledPage, animationSpec = tween(600))
+            }
+        }
+
         val brush = Brush.verticalGradient(colors = listOf(Black300, Black))
         val pageModifier = Modifier.fillMaxWidth()
+        val bankCards = cards.invoke()
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -148,50 +161,37 @@ internal fun CardsScreen(
             fontWeight = FontWeight.Bold
         )
 
-        val pagerModifier = Modifier
-            .fillMaxSize()
-            .constrainAs(pager) {
-                top.linkTo(name.bottom, 30.dp)
-                start.linkTo(parent.start)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(addCard.start)
-                width = Dimension.fillToConstraints
-            }
-
-        ViewPagerSlider(pagerModifier, pageModifier, cards.invoke())
-
-//        HorizontalPager(
-//            pageCount = cards.invoke().size,
-//            modifier = Modifier
-//                .constrainAs(pager) {
-//
-//                    top.linkTo(name.bottom, 30.dp)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(addCard.start)
-//                    width = Dimension.fillToConstraints
-//                }
-//                .clickable {
-//                    onAddNewCardClicked.invoke()
-//                },
-//            state = pagerState,
-//            userScrollEnabled = true,
-//            beyondBoundsPageCount = 3
-//        ) {
-//            BankCardPage(pageModifier, cards.invoke()[pagerState.currentPage].card)
-//        }
+        HorizontalPager(
+            pageCount = bankCards.size,
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(pager) {
+                    top.linkTo(addCard.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(addCard.bottom)
+                    end.linkTo(addCard.start)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                },
+            beyondBoundsPageCount = 3
+        ) { page ->
+            BankCardPage(pageModifier, pagerState, page, bankCards[page].card)
+        }
 
         GradientButton(
             gradient = brush,
             modifier = Modifier
                 .constrainAs(addCard) {
-                    linkTo(pager.top, pager.bottom)
+                    top.linkTo(name.bottom, 20.dp)
+                    bottom.linkTo(parent.bottom, 0.dp)
                     end.linkTo(parent.end, 16.dp)
-                    height = Dimension.fillToConstraints
+                    height = Dimension.value(170.dp)
                     width = Dimension.value(50.dp)
                 },
             shape = RoundedCornerShape(20.dp),
             onClick = {
-                onDetailCardClicked.invoke()
+                onAddNewCardClicked.invoke()
             }
         ) {
             Icon(
