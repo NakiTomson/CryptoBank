@@ -6,21 +6,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.local.entity.OnBoardingDb
 import com.example.local.entity.UserDb
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
 
     @Query("SELECT * FROM user")
-    suspend fun get(): UserDb?
+    fun getUserFlow(): Flow<UserDb?>
+
+    @Query("SELECT * FROM user")
+    suspend fun getUser(): UserDb?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(db: UserDb)
+    suspend fun insertUser(db: UserDb)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(db: UserDb)
+    suspend fun updateUser(db: UserDb)
 
     @Delete
-    suspend fun delete(db: UserDb)
+    suspend fun deleteUser(db: UserDb)
 }

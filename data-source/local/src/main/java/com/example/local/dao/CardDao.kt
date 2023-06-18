@@ -5,18 +5,21 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.local.entity.CardDb
-import com.example.local.entity.OnBoardingDb
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CardDao {
 
     @Query("SELECT * FROM card")
-    suspend fun getAll(): List<CardDb>?
+    fun getAllCardsFlow(): Flow<List<CardDb>?>
+
+    @Query("SELECT * FROM card")
+    suspend fun getAllCards(): List<CardDb>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(db: CardDb)
+    suspend fun insertCard(db: CardDb)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     @JvmSuppressWildcards
-    suspend fun insert(dbs: List<CardDb>)
+    suspend fun insertCard(dbs: List<CardDb>)
 }

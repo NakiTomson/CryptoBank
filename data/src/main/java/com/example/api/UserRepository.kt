@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    val token: Flow<String?>
+    val tokenFlow: Flow<String?>
+
+    val userFlow: Flow<UserEntity?>
 
     suspend fun isNeedOnBoarding(): Boolean
 

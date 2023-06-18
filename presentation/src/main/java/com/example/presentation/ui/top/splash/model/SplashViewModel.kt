@@ -34,7 +34,7 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun subscribeToken() {
-        userInteractor.token.collect {
+        userInteractor.tokenFlow.collect {
             if (it == null) {
                 prepareToken()
                 return@collect

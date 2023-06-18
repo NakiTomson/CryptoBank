@@ -5,5 +5,5 @@ import com.example.entity.CategoryTransactionType
 
 data class BankTransactionCategory(val category: CategoryTransactionType) : BaseBankTransaction() {
     override val id: String
-        get() = category.name.toString()
+        get() = category.name
 }

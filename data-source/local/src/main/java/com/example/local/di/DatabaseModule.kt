@@ -22,6 +22,7 @@ internal object DatabaseModule {
     @Singleton
     fun provideDataBase(@ApplicationContext context: Context): ApplicationDatabase {
         return Room.databaseBuilder(context, ApplicationDatabase::class.java, "cryptoApp.db")
+//            .fallbackToDestructiveMigration()
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
             .addMigrations(MIGRATION_4_5)

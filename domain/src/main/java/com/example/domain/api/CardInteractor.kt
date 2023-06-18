@@ -1,8 +1,12 @@
 package com.example.domain.api
 
 import com.example.entity.CardEntity
+import com.example.entity.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 interface CardInteractor {
 
-    suspend fun getUserCards(userId: String): List<CardEntity>
+    val cardsFlow: Flow<List<CardEntity>?>
+
+    suspend fun getCards(userId: String): List<CardEntity>
 }

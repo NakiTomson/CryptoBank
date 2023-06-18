@@ -9,10 +9,12 @@ import com.example.errors.ServerError
 import com.example.local.entity.UserDb
 import com.example.local.storage.ConfigStorage
 import com.example.local.storage.UserRoomStorage
+import com.example.mapper.toEntity
 import com.example.remote.request.SessionRequest
 import com.example.remote.response.NetworkResult
 import com.example.remote.service.AuthService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,7 +25,9 @@ class UserRepositoryImpl @Inject constructor(
     private val userRoomStorage: UserRoomStorage,
 ) : UserRepository {
 
-    override val token: Flow<String?> = tokenStorage.getUserTokenFlow()
+    override val tokenFlow: Flow<String?> = tokenStorage.getUserTokenFlow()
+
+    override val userFlow: Flow<UserEntity?> = userRoomStorage.getUserFlow().map { it?.toEntity() }
 
     override suspend fun isNeedOnBoarding(): Boolean {
         return configStorage.isNeedOnBoarding()
@@ -64,13 +68,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getUser(): UserEntity? {
         val user = userRoomStorage.getUser() ?: return null
-        return UserEntity(
-            user.id,
-            user.email,
-            getEnumValue(user.type),
-            user.name,
-            user.avatar,
-        )
+        return user.toEntity()
     }
 
     override suspend fun clearUser() {

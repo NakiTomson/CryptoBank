@@ -1,6 +1,5 @@
 package com.example.presentation.ui.bottombar.tabs.home.screen
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
@@ -16,8 +16,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +40,6 @@ import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -94,7 +94,8 @@ fun HomeRoute(
         requestCardClicked,
         payCardClicked,
         moreOptionsClicked,
-        onTransactionClicked
+        onTransactionClicked,
+        viewModel::loadMoreTransactions
     )
 }
 
@@ -112,6 +113,7 @@ internal fun HomeScreen(
     payCardClicked: () -> Unit = {},
     moreOptionsClicked: () -> Unit = {},
     onTransactionClicked: () -> Unit = {},
+    onLoadMore: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -128,6 +130,10 @@ internal fun HomeScreen(
 
         val pagerState: PagerState = rememberPagerState(0)
 
+        val listState: LazyListState = rememberLazyListState()
+
+        val shouldLoadMore by remember { derivedStateOf { listState.isNeedLoadMore() } }
+
         val cardsModifier = Modifier
             .background(Color.White)
             .fillMaxWidth()
@@ -143,7 +149,7 @@ internal fun HomeScreen(
 
         val bankCards = cards().ifEmpty { return }
         val bankCard = bankCards[pagerState.settledPage]
-        LazyColumn(modifier = Modifier.fillMaxSize(), rememberLazyListState()) {
+        LazyColumn(modifier = Modifier.fillMaxSize(), listState) {
             item(key = 0) {
                 CardsScreen(
                     cardsModifier,
@@ -171,18 +177,24 @@ internal fun HomeScreen(
                         is BankTransactionCategory ->
                             CategoryTransactionItem(transactionModifier, it.category)
 
-                        is BankTransaction ->
-                            TransactionItem(
-                                transactionModifier,
-                                it.entity,
-                                bankCard.card.paymentType,
-                                onTransactionClicked
-                            )
-
+                        is BankTransaction -> TransactionItem(
+                            transactionModifier,
+                            it.entity,
+                            bankCard.card.paymentType,
+                            onTransactionClicked
+                        )
                     }
+                    if (shouldLoadMore) onLoadMore.invoke(bankCard.card.id)
                 }
             }
+
         }
     }
 }
 
+fun LazyListState.isScrolledToTheEnd() =
+    layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+
+fun LazyListState.isNeedLoadMore(): Boolean =
+    (layoutInfo.visibleItemsInfo.getOrNull(layoutInfo.visibleItemsInfo.lastIndex)?.index ?: -1) >=
+            layoutInfo.totalItemsCount * 1.5 / 2

@@ -34,4 +34,5 @@ dependencies {
     implementation(Libraries.accompanistPermissions)
     implementation(Libraries.accompanistPermissions)
     implementation(Libraries.constraintCompose)
+    implementation("androidx.paging:paging-compose:3.2.0-beta01")
 }
