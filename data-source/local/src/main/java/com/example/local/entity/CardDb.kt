@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
 
-@Entity(tableName = CardDb.Companion.TABLE_NAME)
+@Entity(tableName = CardDb.TABLE_NAME)
 data class CardDb(
     @PrimaryKey val id: String,
     val holderName: String,
@@ -19,23 +19,8 @@ data class CardDb(
     val paymentType: String,
     val paymentSystem: String,
     @Embedded val designCard: DesignCardDb,
-    @ColumnInfo(name = "transactions") val transactions: List<TransactionDB>
 ) {
     companion object {
-        const val TABLE_NAME = "card"
-    }
-}
-
-data class TransactionDB(
-    @ColumnInfo(name = "transaction_id") val id: String,
-    val cardId: String,
-    val name: String,
-    val media: String,
-    val amount: String,
-    val type: String,
-    val category: String
-){
-    companion object{
         const val TABLE_NAME = "card"
     }
 }

@@ -46,6 +46,7 @@ import coil.request.ImageRequest
 import com.example.entity.AuthorizationType
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
+import com.example.entity.TransactionEntity
 import com.example.entity.UserEntity
 import com.example.presentation.theme.Black
 import com.example.presentation.theme.Black300
@@ -53,6 +54,7 @@ import com.example.presentation.theme.Green100
 import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
+import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BaseBankTransaction
 import kotlinx.coroutines.launch
 import presentation.R
 
@@ -67,11 +69,7 @@ private fun CardsScreenPreview() {
 
     val pagerState: PagerState = rememberPagerState()
     val cardEntity = CardEntity()
-    val transactionType = listOf(
-        BankTransactionCategory(CategoryTransactionType.Recent),
-        *cardEntity.transactions.map { BankTransaction(it) }.toTypedArray()
-    )
-    val cards = mutableListOf(BankCard(cardEntity, transactionType))
+    val cards = mutableListOf(BankCard(cardEntity))
     val user = UserEntity("1", "", AuthorizationType.Null, name = "Dmitry")
     LazyColumn(modifier = Modifier.fillMaxSize(), rememberLazyListState()) {
         item {

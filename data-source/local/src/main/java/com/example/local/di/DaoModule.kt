@@ -2,6 +2,7 @@ package com.example.local.di
 
 import com.example.local.dao.CardDao
 import com.example.local.dao.OnBoardingDao
+import com.example.local.dao.TransactionDao
 import com.example.local.dao.UserDao
 import com.example.local.database.ApplicationDatabase
 import dagger.Module
@@ -30,5 +31,11 @@ internal object DaoModule {
     @Singleton
     fun provideCardDao(db: ApplicationDatabase): CardDao {
         return db.getCardDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransactionDao(db: ApplicationDatabase): TransactionDao {
+        return db.getTransactionDao()
     }
 }

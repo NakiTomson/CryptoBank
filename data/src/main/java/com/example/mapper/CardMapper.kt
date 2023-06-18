@@ -27,7 +27,6 @@ fun CardDb.getEntity(): CardEntity {
         PaymentCurrencyType.getType(paymentType),
         PaymentSystemType.getType(paymentSystem),
         designCard.toEntity(),
-        transactions.toEntity().sortedByDescending { it.data }.sortedBy { it.category }
     )
 }
 
@@ -66,7 +65,6 @@ fun CardEntity.toDb(): CardDb {
         paymentType.name,
         paymentSystem.name,
         designCard.toDb(),
-        transactions.toDb()
     )
 }
 
@@ -74,8 +72,8 @@ fun DesignCardEntity.toDb(): DesignCardDb {
     return DesignCardDb(background, textColor, paySystemLogo)
 }
 
-fun List<TransactionEntity>.toDb(): ArrayList<TransactionDB> {
-    return this.map { it.toDb() } as ArrayList
+fun List<TransactionEntity>.toDb(): List<TransactionDB> {
+    return this.map { it.toDb() }
 }
 
 fun TransactionEntity.toDb(): TransactionDB {

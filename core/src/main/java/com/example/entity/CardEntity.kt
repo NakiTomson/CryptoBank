@@ -14,18 +14,6 @@ data class CardEntity(
     val paymentSystem: PaymentSystemType = PaymentSystemType.Visa,
     val designCard: DesignCardEntity =
         DesignCardEntity("", "#f9f9f8", ""),
-    val transactions: List<TransactionEntity> = listOf(
-        TransactionEntity(),
-        TransactionEntity(id = "2"),
-        TransactionEntity(id = "3"),
-        TransactionEntity(id = "4"),
-        TransactionEntity(id = "5"),
-        TransactionEntity(id = "6"),
-        TransactionEntity(id = "7"),
-        TransactionEntity(id = "8"),
-        TransactionEntity(id = "9"),
-        TransactionEntity(id = "10"),
-    ),
 )
 
 class DesignCardEntity(

@@ -28,7 +28,7 @@ class DesignCardResponse(
     @SerializedName("paySystemLogo") val paySystemLogo: String
 )
 
-fun CardResponse.toEntity(transaction: List<TransactionResponse>): CardEntity {
+fun CardResponse.toEntity(): CardEntity {
     return CardEntity(
         id,
         holderName,
@@ -37,7 +37,6 @@ fun CardResponse.toEntity(transaction: List<TransactionResponse>): CardEntity {
         PaymentCurrencyType.getType(paymentType),
         PaymentSystemType.getType(paymentSystem),
         designCard.toEntity(),
-        transaction.toEntity(),
     )
 }
 

@@ -14,11 +14,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.TabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.entity.AuthorizationType
 import com.example.entity.CardEntity
 import com.example.entity.CategoryTransactionType
+import com.example.entity.TransactionEntity
 import com.example.entity.UserEntity
 import com.example.presentation.core.EmptySideEffect
 import com.example.presentation.core_compose.CircularProgressBar
@@ -39,20 +43,27 @@ import com.example.presentation.theme.White400
 import com.example.presentation.ui.bottombar.tabs.home.dto.BankCard
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransactionCategory
 import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BankTransaction
+import com.example.presentation.ui.bottombar.tabs.home.dto.transaction.BaseBankTransaction
 import com.example.presentation.ui.bottombar.tabs.home.model.HomeViewModel
+import kotlinx.coroutines.launch
 
 
 @Composable
 @Preview(showBackground = true)
 private fun HomeScreenPreview() {
     val cardEntity = CardEntity()
-    val transactionType = listOf(
+    val transactions: List<BaseBankTransaction> = listOf(
         BankTransactionCategory(CategoryTransactionType.Recent),
-        *cardEntity.transactions.map { BankTransaction(it) }.toTypedArray()
+        BankTransaction(TransactionEntity("1")),
+        BankTransaction(TransactionEntity("2")),
+        BankTransaction(TransactionEntity("3")),
+        BankTransaction(TransactionEntity("4")),
+        BankTransaction(TransactionEntity("5")),
+        BankTransaction(TransactionEntity("6")),
     )
-    val cards = mutableListOf(BankCard(cardEntity, transactionType))
+    val cards = mutableListOf(BankCard(cardEntity))
     val user = UserEntity("1", "", AuthorizationType.Null, name = "Dmitry")
-    HomeScreen(cards = { cards }, user = { user })
+    HomeScreen(cards = { cards }, transactions = { transactions }, user = { user })
 }
 
 @Composable
@@ -71,6 +82,8 @@ fun HomeRoute(
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
     val userState = state.value.user.collectAsStateWithLifecycle()
     val cardsState = state.value.cards.collectAsStateWithLifecycle()
+    val transactionState = state.value.transactions.collectAsStateWithLifecycle()
+    val selectedCardPosition = state.value.selectedCardPosition.collectAsStateWithLifecycle()
     val isUserLoading = state.value.isUserLoading.collectAsStateWithLifecycle()
     val isBankCardsLoading = state.value.isBankCardsLoading.collectAsStateWithLifecycle()
 
@@ -86,6 +99,8 @@ fun HomeRoute(
     HomeScreen(
         { userState.value },
         { cardsState.value },
+        { transactionState.value },
+        { selectedCardPosition.value },
         { isBankCardsLoading.value },
         onDetailCardClicked,
         onAddNewCardClicked,
@@ -95,7 +110,8 @@ fun HomeRoute(
         payCardClicked,
         moreOptionsClicked,
         onTransactionClicked,
-        viewModel::loadMoreTransactions
+        viewModel::loadMoreTransactions,
+        viewModel::updateSelectedCard,
     )
 }
 
@@ -104,6 +120,8 @@ fun HomeRoute(
 internal fun HomeScreen(
     user: () -> UserEntity,
     cards: () -> List<BankCard>,
+    transactions: () -> List<BaseBankTransaction>,
+    selectedCardPosition: () -> Int = { 0 },
     isBackCardLoading: () -> Boolean = { false },
     onDetailCardClicked: () -> Unit = {},
     onAddNewCardClicked: () -> Unit = {},
@@ -114,6 +132,7 @@ internal fun HomeScreen(
     moreOptionsClicked: () -> Unit = {},
     onTransactionClicked: () -> Unit = {},
     onLoadMore: (String) -> Unit = {},
+    updateSelectedCardPosition: (Int) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -134,6 +153,10 @@ internal fun HomeScreen(
 
         val shouldLoadMore by remember { derivedStateOf { listState.isNeedLoadMore() } }
 
+        LaunchedEffect(pagerState.settledPage) {
+            updateSelectedCardPosition.invoke(pagerState.settledPage)
+        }
+
         val cardsModifier = Modifier
             .background(Color.White)
             .fillMaxWidth()
@@ -148,7 +171,8 @@ internal fun HomeScreen(
             .padding(top = 10.dp, start = 16.dp, end = 16.dp)
 
         val bankCards = cards().ifEmpty { return }
-        val bankCard = bankCards[pagerState.settledPage]
+        val bankCard = bankCards[selectedCardPosition.invoke()]
+
         LazyColumn(modifier = Modifier.fillMaxSize(), listState) {
             item(key = 0) {
                 CardsScreen(
@@ -171,7 +195,7 @@ internal fun HomeScreen(
                 )
             }
 
-            items(bankCard.transactions, key = { it.id }) {
+            items(transactions.invoke(), key = { it.id }) {
                 Row(Modifier.animateItemPlacement()) {
                     when (it) {
                         is BankTransactionCategory ->
@@ -191,9 +215,6 @@ internal fun HomeScreen(
         }
     }
 }
-
-fun LazyListState.isScrolledToTheEnd() =
-    layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 
 fun LazyListState.isNeedLoadMore(): Boolean =
     (layoutInfo.visibleItemsInfo.getOrNull(layoutInfo.visibleItemsInfo.lastIndex)?.index ?: -1) >=

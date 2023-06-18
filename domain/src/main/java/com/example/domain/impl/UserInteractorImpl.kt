@@ -1,5 +1,6 @@
 package com.example.domain.impl
 
+import com.example.api.CardRepository
 import com.example.api.UserRepository
 import com.example.core.Dispatchers
 import com.example.domain.api.CardInteractor
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 class UserInteractorImpl @Inject constructor(
     private val userRepository: UserRepository,
-    private val cardInteractor: CardInteractor,
+    private val cardRepository: CardRepository,
     private val dispatchers: Dispatchers,
 ) : UserInteractor {
 
@@ -37,7 +38,6 @@ class UserInteractorImpl @Inject constructor(
 
     override suspend fun saveUser(user: UserEntity): Unit = withContext(dispatchers.io) {
         userRepository.saveUser(user)
-        cardInteractor.getCards(user.id)
     }
 
     override suspend fun getUser(): UserEntity? = withContext(dispatchers.io) {

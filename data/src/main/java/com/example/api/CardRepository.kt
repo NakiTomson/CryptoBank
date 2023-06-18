@@ -8,8 +8,9 @@ interface CardRepository {
 
     val cardsFlow: Flow<List<CardEntity>?>
 
-    suspend fun getCards(userId: String): List<CardEntity>
+    val transactionFlow: Flow<List<TransactionEntity>>
 
-    suspend fun getTransactions(cardId: String): List<TransactionEntity>
+    suspend fun fetchCards(userId: String)
 
+    suspend fun fetchTransactions(cardId: String)
 }
